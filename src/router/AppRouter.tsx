@@ -3,6 +3,7 @@ import Root from "../Root";
 import Login from "../pages/authentication/Login";
 import Register from "../pages/authentication/Register";
 import { LOGIN_ROUTE, REGISTER_ROUTE } from "./routerPath";
+import Home from "../pages/home/Home";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: REGISTER_ROUTE,
         element: <Register />,
+      },
+      {
+        path: "/home",
+        element: <Home />,
       },
     ],
   },
