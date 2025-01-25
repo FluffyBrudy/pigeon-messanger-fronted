@@ -6,6 +6,7 @@ import { api } from "../../api/interceptor";
 import { LOGIN_ENDPOINT } from "../../api/endpoints";
 import { useState } from "react";
 import { FieldWrapper } from "../../components/form/FieldWrapper";
+import { ACCESS_TOKEN } from "../../api/constants";
 
 interface SubmitValues {
   email: string;
@@ -29,7 +30,10 @@ const Login = () => {
       .post(LOGIN_ENDPOINT, { email, password })
       .then((res) => {
         setIsLoading(false);
-        console.log(res);
+        console.log(res.status);
+        if (res.status === 200) {
+          localStorage.setItem(ACCESS_TOKEN, res.data?.data[ACCESS_TOKEN]);
+        }
       })
       .catch((err) => {
         setIsLoading(false);
