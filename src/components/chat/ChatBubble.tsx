@@ -3,16 +3,25 @@ import TextBubble from "./TextBubble";
 
 interface ChatBubbleProps {
   imageUrl: string;
-  name: string;
+  username: string;
   text: string;
+  handleClick: CallableFunction;
 }
 
-const ChatBubble = ({ imageUrl, name, text }: ChatBubbleProps) => {
+const ChatBubble = ({
+  imageUrl,
+  username,
+  text,
+  handleClick,
+}: ChatBubbleProps) => {
   return (
-    <div className="mt-1 flex gap-1 items-center max-h-[60px] w-[300px] hover:bg-gray-600 hover:shadow-lg px-2 rounded-md cursor-pointer hover:delay-0">
+    <div
+      onClick={() => handleClick()}
+      className="mt-1 flex gap-1 items-center max-h-[60px] w-full hover:bg-gray-600 hover:shadow-lg px-2 rounded-md cursor-pointer hover:delay-0"
+    >
       <ImageBubble src={imageUrl} />
       <div className="relative p-2">
-        <p className="font-bold">{name}</p>
+        <p className="font-bold">{username}</p>
         <TextBubble text={text} />
       </div>
     </div>

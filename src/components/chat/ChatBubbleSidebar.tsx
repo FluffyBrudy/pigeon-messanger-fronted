@@ -1,118 +1,76 @@
+import { useCallback } from "react";
+import { useSearchFriendStore } from "../../store/friendSearchStore";
+import { useAddFriendStore } from "../../store/addFriendStore";
+import FindFriends from "../socialize/FindFriends";
 import ChatBubble from "./ChatBubble";
+import { SearchedFriend } from "../../types/store";
 
 const chatBubblesData = [
   {
+    id: "1",
     imageUrl: "https://cdn-icons-png.freepik.com/256/9436/9436366.png",
-    name: "Rihanna",
+    username: "Rihanna",
     text: "Hello mate",
   },
   {
+    id: "2",
     imageUrl: "https://cdn-icons-png.freepik.com/256/8632/8632455.png",
-    name: "John",
+    username: "John",
     text: "How are you?",
   },
   {
+    id: "3",
     imageUrl: "https://cdn-icons-png.freepik.com/256/1881/1881133.png",
-    name: "Emily",
+    username: "Emily",
     text: "Good morning!sssssdddddddddddd",
   },
   {
+    id: "4",
     imageUrl: "https://cdn-icons-png.freepik.com/256/9436/9436366.png",
-    name: "Alice",
+    username: "Alice",
     text: "Hey there! What's up?",
   },
   {
+    id: "5",
     imageUrl: "https://cdn-icons-png.freepik.com/256/8632/8632455.png",
-    name: "Michael",
+    username: "Michael",
     text: "I'm doing well, thanks!",
-  },
-  {
-    imageUrl: "https://cdn-icons-png.freepik.com/256/1881/1881133.png",
-    name: "Sophia",
-    text: "Good afternoon! How's your day going?",
-  },
-  {
-    imageUrl: "https://cdn-icons-png.freepik.com/256/9436/9436366.png",
-    name: "David",
-    text: "What are your plans for today?",
-  },
-  {
-    imageUrl: "https://cdn-icons-png.freepik.com/256/8632/8632455.png",
-    name: "Olivia",
-    text: "Just finished a great book!",
-  },
-  {
-    imageUrl: "https://cdn-icons-png.freepik.com/256/1881/1881133.png",
-    name: "James",
-    text: "Looking forward to the weekend!",
-  },
-  {
-    imageUrl: "https://cdn-icons-png.freepik.com/256/9436/9436366.png",
-    name: "Isabella",
-    text: "Have you seen the latest movie?",
-  },
-  {
-    imageUrl: "https://cdn-icons-png.freepik.com/256/8632/8632455.png",
-    name: "Liam",
-    text: "I just got a new job!",
-  },
-  {
-    imageUrl: "https://cdn-icons-png.freepik.com/256/1881/1881133.png",
-    name: "Mia",
-    text: "Can't wait for the concert next week!",
-  },
-  {
-    imageUrl: "https://cdn-icons-png.freepik.com/256/9436/9436366.png",
-    name: "Noah",
-    text: "How's your family doing?",
-  },
-  {
-    imageUrl: "https://cdn-icons-png.freepik.com/256/8632/8632455.png",
-    name: "Ava",
-    text: "Just got back from vacation!",
-  },
-  {
-    imageUrl: "https://cdn-icons-png.freepik.com/256/1881/1881133.png",
-    name: "Ethan",
-    text: "What a beautiful day it is!",
-  },
-  {
-    imageUrl: "https://cdn-icons-png.freepik.com/256/9436/9436366.png",
-    name: "Charlotte",
-    text: "I love this weather!",
-  },
-  {
-    imageUrl: "https://cdn-icons-png.freepik.com/256/8632/8632455.png",
-    name: "Lucas",
-    text: "Have you tried that new restaurant?",
-  },
-  {
-    imageUrl: "https://cdn-icons-png.freepik.com/256/1881/1881133.png",
-    name: "Amelia",
-    text: "Just got a new puppy!",
-  },
-  {
-    imageUrl: "https://cdn-icons-png.freepik.com/256/9436/9436366.png",
-    name: "Oliver",
-    text: "What are you reading these days?",
-  },
-  {
-    imageUrl: "https://cdn-icons-png.freepik.com/256/8632/8632455.png",
-    name: "Harper",
-    text: "I need some coffee!",
-  },
-  {
-    imageUrl: "https://cdn-icons-png.freepik.com/256/1881/1881133.png",
-    name: "Elijah",
-    text: "Let's catch up soon!",
   },
 ];
 
 const ChatBubbleSidebar = () => {
+  const { searchedFriend } = useSearchFriendStore();
+  const { updateFriendData } = useAddFriendStore();
+
+  const handleClick = useCallback(
+    (friendInfo: SearchedFriend) => {
+      const { username, id, imageUrl } = friendInfo;
+      updateFriendData({ username, id, imageUrl, isActive: true });
+    },
+    [updateFriendData]
+  );
   return (
-    <div className="flex flex-col gap-3 mt-2 ml-2 sm:mt-2 md:mt-4 md:ml-10 lg:mt-7 lg:ml-7 max-h-[100vh] overflow-y-scroll max-w-[400px]">
+    <div className="flex flex-col gap-3  h-screen overflow-y-scroll w-[300px] max-w-[300px] border-gray-500 border-[1px] rounded-md py-0">
+      <div className="sticky top-0 z-10 bg-gray-300 py-2 px-2 border-b border-gray-300">
+        <FindFriends />
+        <div className="sticky top-0 z-10  py-2 px-2 border-b border-gray-300 text-black">
+          {searchedFriend.map((friend, i) => (
+            <ChatBubble
+              key={i}
+              text=""
+              username={friend.username}
+              imageUrl={friend.imageUrl || ""}
+              handleClick={() => handleClick(friend)}
+            />
+          ))}
+        </div>
+      </div>
       {chatBubblesData.map((data, i) => (
-        <ChatBubble key={i} {...data} />
+        <ChatBubble
+          handleClick={() => handleClick({ ...data })}
+          key={i}
+          {...data}
+        />
       ))}
     </div>
   );

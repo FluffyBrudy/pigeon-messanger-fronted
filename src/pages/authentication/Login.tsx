@@ -1,7 +1,7 @@
 import { Formik, Form } from "formik";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { object as yobject, string as ystring } from "yup";
-import { REGISTER_ROUTE } from "../../router/routerPath";
+import { HOME_ROUTE, REGISTER_ROUTE } from "../../router/routerPath";
 import { api } from "../../api/interceptor";
 import { LOGIN_ENDPOINT } from "../../api/endpoints";
 import { useState } from "react";
@@ -23,9 +23,11 @@ const LoginSchema = yobject().shape({
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const navigation = useNavigate();
 
   const handleSubmit = ({ email, password }: SubmitValues) => {
     setIsLoading(true);
+    localStorage.removeItem(ACCESS_TOKEN);
     api
       .post(LOGIN_ENDPOINT, { email, password })
       .then((res) => {
@@ -34,6 +36,7 @@ const Login = () => {
         if (res.status === 200) {
           localStorage.setItem(ACCESS_TOKEN, res.data?.data[ACCESS_TOKEN]);
         }
+        navigation(HOME_ROUTE);
       })
       .catch((err) => {
         setIsLoading(false);

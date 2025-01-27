@@ -9,6 +9,14 @@ export function connectSocket() {
     socket.on("connect", () => {
       console.log("connected");
     });
+
+    socket.on("connect_error", (error) => {
+      console.error(error.message);
+      if (socket) {
+        socket.disconnect();
+        socket = null;
+      }
+    });
   }
 
   return socket;
