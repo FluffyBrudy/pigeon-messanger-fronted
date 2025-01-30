@@ -6,6 +6,7 @@ const defaultValue: AddFriendStoreValues = {
   username: "",
   imageUrl: "",
   isActive: false,
+  isAccepted: false,
 };
 
 export const useAddFriendStore = create<IAddFriendStore>()((set, get) => ({

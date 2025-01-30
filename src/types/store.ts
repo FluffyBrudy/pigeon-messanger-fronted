@@ -1,8 +1,4 @@
-export interface SearchedFriend {
-  id: string;
-  username: string;
-  imageUrl: string;
-}
+import { SearchedFriend } from "./social";
 
 export interface IFriendSearchStore {
   error: string;
@@ -21,6 +17,7 @@ export interface IAddFriendStore {
   isActive: boolean;
   username: string;
   imageUrl: string;
+  isAccepted?: boolean;
   updateFriendData: (data: AddFriendStoreValues) => void;
   toggleVisibility: () => void;
   getData: () => AddFriendStoreValues;

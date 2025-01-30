@@ -3,7 +3,7 @@ import { useSearchFriendStore } from "../../store/friendSearchStore";
 import { useAddFriendStore } from "../../store/addFriendStore";
 import FindFriends from "../socialize/FindFriends";
 import ChatBubble from "./ChatBubble";
-import { SearchedFriend } from "../../types/store";
+import { SearchedFriend } from "../../types/social";
 
 const chatBubblesData = [
   {
@@ -11,6 +11,7 @@ const chatBubblesData = [
     imageUrl: "https://cdn-icons-png.freepik.com/256/9436/9436366.png",
     username: "Rihanna",
     text: "Hello mate",
+    isAccepted: true,
   },
   {
     id: "2",
@@ -44,8 +45,8 @@ const ChatBubbleSidebar = () => {
 
   const handleClick = useCallback(
     (friendInfo: SearchedFriend) => {
-      const { username, id, imageUrl } = friendInfo;
-      updateFriendData({ username, id, imageUrl, isActive: true });
+      const { username, id, imageUrl, isAccepted } = friendInfo;
+      updateFriendData({ username, id, imageUrl, isActive: true, isAccepted });
     },
     [updateFriendData]
   );
@@ -67,7 +68,7 @@ const ChatBubbleSidebar = () => {
       </div>
       {chatBubblesData.map((data, i) => (
         <ChatBubble
-          handleClick={() => handleClick({ ...data })}
+          handleClick={() => handleClick({ ...data })} //will be replaced to load chat directly
           key={i}
           {...data}
         />

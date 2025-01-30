@@ -1,14 +1,11 @@
 import { X, UserPlus, MessageCircle } from "lucide-react";
 import { useAddFriendStore } from "../../store/addFriendStore";
+import { AddFriendStoreValues } from "../../types/store";
 
-interface AddFriendProps {
-  username: string;
-  imageUrl: string;
-  id: string;
-}
+type AddFriendProps = AddFriendStoreValues;
 
-const AddFriend = ({ username, imageUrl, id }: AddFriendProps) => {
-  console.log(id);
+const AddFriend = ({ username, imageUrl, id, isAccepted }: AddFriendProps) => {
+  console.log(id, isAccepted);
   const { toggleVisibility } = useAddFriendStore();
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center p-4">
@@ -38,14 +35,17 @@ const AddFriend = ({ username, imageUrl, id }: AddFriendProps) => {
         </div>
 
         <div className="p-4 flex gap-3">
-          <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full py-2 flex items-center justify-center gap-2">
-            <UserPlus size={16} />
-            Add Friend
-          </button>
-          <button className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-full py-2 flex items-center justify-center gap-2 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white">
-            <MessageCircle size={16} />
-            Message
-          </button>
+          {!isAccepted ? (
+            <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full py-2 flex items-center justify-center gap-2">
+              <UserPlus size={16} />
+              Add Friend
+            </button>
+          ) : (
+            <button className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-full py-2 flex items-center justify-center gap-2 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white">
+              <MessageCircle size={16} />
+              Message
+            </button>
+          )}
         </div>
       </div>
     </div>

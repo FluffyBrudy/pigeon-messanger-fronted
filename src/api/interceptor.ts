@@ -1,5 +1,10 @@
 import axios, { AxiosError } from "axios";
-import { ACCESS_TOKEN, AUTHORIZATION, BEARER } from "./constants";
+import {
+  ACCESS_TOKEN,
+  AUTHORIZATION,
+  BEARER,
+  CONNECTION_ERROR,
+} from "./constants";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_API,
@@ -21,7 +26,7 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject((error as AxiosError).response)
+  (error) => Promise.reject((error as AxiosError).response || CONNECTION_ERROR)
 );
 
 export { api };
