@@ -5,7 +5,7 @@ import { HOME_ROUTE, REGISTER_ROUTE } from "../../router/routerPath";
 import { api } from "../../api/interceptor";
 import { LOGIN_ENDPOINT } from "../../api/endpoints";
 import { useState } from "react";
-import { FieldWrapper } from "../../components/form/FieldWrapper";
+import { FieldWrapper } from "../form/FieldWrapper";
 import { ACCESS_TOKEN } from "../../api/constants";
 import { useAuthStore } from "../../store/authStore";
 
@@ -48,8 +48,6 @@ const Login = () => {
       });
   };
 
-  const initValues = { email: "", password: "" };
-
   return (
     <div className="min-h-screen py-6 flex flex-col justify-center sm:py-12">
       <div className="relative py-3 w-[min(700px,97vw)] sm:mx-auto">
@@ -60,7 +58,7 @@ const Login = () => {
               <h1 className="text-2xl font-semibold">Login</h1>
             </div>
             <Formik
-              initialValues={{ ...initValues }}
+              initialValues={{ email: "", password: "" }}
               validationSchema={LoginSchema}
               onSubmit={handleSubmit}
             >

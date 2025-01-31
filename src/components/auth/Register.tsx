@@ -5,7 +5,7 @@ import { LOGIN_ROUTE } from "../../router/routerPath";
 import { api } from "../../api/interceptor";
 import { REGISTER_ENDPOINT } from "../../api/endpoints";
 import { useState } from "react";
-import { FieldWrapper } from "../../components/form/FieldWrapper";
+import { FieldWrapper } from "../form/FieldWrapper";
 
 interface SubmitValues {
   username: string;

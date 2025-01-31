@@ -1,6 +1,6 @@
 import ChatBubbleSidebar from "../../components/chat/ChatBubbleSidebar";
 import ChatInterface from "../../components/chat/ChatInterface";
-import { AddFriendViewer } from "../../components/global/AddFriendViewer";
+import { AddFriendViewer } from "../../components/common/AddFriendViewer";
 
 const Home = () => {
   return (

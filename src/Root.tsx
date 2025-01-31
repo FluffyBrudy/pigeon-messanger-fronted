@@ -13,10 +13,8 @@ const Root = () => {
     const reAuthorize = async () => {
       const res = await attemptAuthorization();
       if (res.status === 200) {
-        setAuthenticated(true);
         navigation(HOME_ROUTE);
       } else {
-        setAuthenticated(false);
         navigation(LOGIN_ROUTE);
       }
     };

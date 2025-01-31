@@ -11,14 +11,20 @@ const defaultValue = {
 
 export const useAuthStore = create<IAuthStore>((set) => ({
   ...defaultValue,
+
   setAuthenticated(isAuthenticated: boolean) {
     set({ isAuthenticated });
   },
+
   async attemptAuthorization() {
     try {
       const res = await api.post(SILENT_LOGIN_ENDPOINT);
+      console.log(res);
+      set({ isAuthenticated: true });
       return res;
     } catch (error) {
+      console.log(error);
+      set({ isAuthenticated: false });
       return error as AxiosError;
     }
   },
