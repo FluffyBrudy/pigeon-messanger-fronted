@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { object as yobject, string as ystring } from "yup";
 import { HOME_ROUTE, REGISTER_ROUTE } from "../../router/routerPath";
 import { api } from "../../api/interceptor";
-import { LOGIN_ENDPOINT } from "../../api/endpoints";
+import { LOGIN_ENDPOINT_POST } from "../../api/endpoints";
 import { useState } from "react";
 import { FieldWrapper } from "../form/FieldWrapper";
 import { ACCESS_TOKEN } from "../../api/constants";
@@ -31,7 +31,7 @@ const Login = () => {
     setIsLoading(true);
     localStorage.removeItem(ACCESS_TOKEN);
     api
-      .post(LOGIN_ENDPOINT, { email, password })
+      .post(LOGIN_ENDPOINT_POST, { email, password })
       .then((res) => {
         setIsLoading(false);
         console.log(res.status);
