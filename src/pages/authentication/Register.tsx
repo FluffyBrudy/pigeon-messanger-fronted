@@ -1,5 +1,5 @@
 import { Formik, Form } from "formik";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { object as yobject, string as ystring, ref as yref } from "yup";
 import { LOGIN_ROUTE } from "../../router/routerPath";
 import { api } from "../../api/interceptor";
@@ -30,14 +30,15 @@ const RegisterSchema = yobject().shape({
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const navigation = useNavigate();
 
   const handleSubmit = ({ username, email, password }: SubmitValues) => {
     setIsLoading(true);
     api
       .post(REGISTER_ENDPOINT, { username, email, password })
-      .then((res) => {
+      .then(() => {
         setIsLoading(false);
-        console.log(res);
+        navigation(LOGIN_ROUTE);
       })
       .catch((err) => {
         setIsLoading(false);
