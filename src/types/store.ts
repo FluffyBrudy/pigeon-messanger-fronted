@@ -1,4 +1,12 @@
+import { AxiosError, AxiosResponse } from "axios";
 import { SearchedFriend } from "./social";
+
+export interface IAuthStore {
+  userId: string | null;
+  isAuthenticated: boolean;
+  setAuthenticated: (isAuthenticated: boolean) => void;
+  attemptAuthorization: () => Promise<AxiosResponse | AxiosError>;
+}
 
 export interface IFriendSearchStore {
   error: string;

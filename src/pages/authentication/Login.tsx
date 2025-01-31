@@ -7,6 +7,7 @@ import { LOGIN_ENDPOINT } from "../../api/endpoints";
 import { useState } from "react";
 import { FieldWrapper } from "../../components/form/FieldWrapper";
 import { ACCESS_TOKEN } from "../../api/constants";
+import { useAuthStore } from "../../store/authStore";
 
 interface SubmitValues {
   email: string;
@@ -24,6 +25,7 @@ const LoginSchema = yobject().shape({
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigate();
+  const { setAuthenticated } = useAuthStore();
 
   const handleSubmit = ({ email, password }: SubmitValues) => {
     setIsLoading(true);
@@ -34,6 +36,7 @@ const Login = () => {
         setIsLoading(false);
         console.log(res.status);
         if (res.status === 200) {
+          setAuthenticated(true);
           localStorage.setItem(ACCESS_TOKEN, res.data?.data[ACCESS_TOKEN]);
         }
         navigation(HOME_ROUTE);
@@ -41,6 +44,7 @@ const Login = () => {
       .catch((err) => {
         setIsLoading(false);
         console.log(err);
+        setAuthenticated(false);
       });
   };
 
