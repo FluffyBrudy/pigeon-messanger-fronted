@@ -19,12 +19,13 @@ export const useAuthStore = create<IAuthStore>((set) => ({
   async attemptAuthorization() {
     try {
       const res = await api.post(SILENT_LOGIN_ENDPOINT);
-      console.log(res);
-      set({ isAuthenticated: true });
+      if (res.status === 200)
+        set({ isAuthenticated: true, userId: res.data.data["id"] as string });
+      console.log(res.data.data.id);
       return res;
     } catch (error) {
       console.log(error);
-      set({ isAuthenticated: false });
+      set({ isAuthenticated: false, userId: null });
       return error as AxiosError;
     }
   },
