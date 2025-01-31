@@ -4,17 +4,15 @@ import { AddFriendViewer } from "../../components/global/AddFriendViewer";
 
 const Home = () => {
   return (
-    <div>
-      <div className="flex gap-1">
-        <div className="shrink-0">
-          <ChatBubbleSidebar />
-        </div>
-        <div className="flex-1">
-          <ChatInterface />
-        </div>
-        <div>
-          <AddFriendViewer />
-        </div>
+    <div className="h-full flex gap-1">
+      <div className="shrink-0">
+        <ChatBubbleSidebar />
+      </div>
+      <div className="flex-1 overflow-auto">
+        <ChatInterface />
+      </div>
+      <div className="shrink-0">
+        <AddFriendViewer />
       </div>
     </div>
   );

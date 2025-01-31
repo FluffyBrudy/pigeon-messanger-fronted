@@ -2,7 +2,7 @@ import MessengeInputBox from "./MessageInputBox";
 
 const ChatInterface = () => {
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-full">
       <div className="flex-1 overflow-auto">
         <div>Chat History will go here...</div>
       </div>
