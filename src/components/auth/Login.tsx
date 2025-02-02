@@ -8,6 +8,7 @@ import { useState } from "react";
 import { FieldWrapper } from "../form/FieldWrapper";
 import { ACCESS_TOKEN } from "../../api/constants";
 import { useAuthStore } from "../../store/authStore";
+import { EyeClosed, EyeIcon } from "lucide-react";
 
 interface SubmitValues {
   email: string;
@@ -23,11 +24,17 @@ const LoginSchema = yobject().shape({
 });
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigate();
   const { setAuthenticated } = useAuthStore();
 
+  const togglePasswordVisibility = () => {
+    setShowPassword((state) => !state);
+  };
+
   const handleSubmit = ({ email, password }: SubmitValues) => {
+    setShowPassword(false);
     setIsLoading(true);
     localStorage.removeItem(ACCESS_TOKEN);
     api
@@ -74,15 +81,28 @@ const Login = () => {
                       error={errors.email || ""}
                       touched={touched.email || false}
                     />
-                    <FieldWrapper
-                      id="password"
-                      name="password"
-                      type="password"
-                      label="Password"
-                      placeholder="Enter your password"
-                      error={errors.password || ""}
-                      touched={touched.password || false}
-                    />
+                    <div className="relative">
+                      <FieldWrapper
+                        id="password"
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        label="Password"
+                        placeholder="Enter your password"
+                        error={errors.password || ""}
+                        touched={touched.password || false}
+                      />
+                      {showPassword ? (
+                        <EyeIcon
+                          onClick={togglePasswordVisibility}
+                          className="absolute right-0 top-0"
+                        />
+                      ) : (
+                        <EyeClosed
+                          onClick={togglePasswordVisibility}
+                          className="absolute right-0 top-0"
+                        />
+                      )}
+                    </div>
                     <div className="relative">
                       <button
                         type="submit"
