@@ -1,6 +1,6 @@
 import { ChangeEvent, useRef, useState, FocusEvent } from "react";
 import { api } from "../../api/interceptor";
-import { FIND_FRIENDS_ENDPOINT_POST } from "../../api/endpoints";
+import { SOCIAL_FRIENDS_SEARCH_POST } from "../../api/endpoints";
 import { useSearchFriendStore } from "../../store/friendSearchStore";
 import { SearchedFriend } from "../../types/social";
 import { Filter, UserPlus } from "lucide-react";
@@ -26,7 +26,7 @@ const FindFriends = () => {
 
     timeoutRef.current = setTimeout(async () => {
       try {
-        const res = await api.post(FIND_FRIENDS_ENDPOINT_POST, {
+        const res = await api.post(SOCIAL_FRIENDS_SEARCH_POST, {
           searchTerm: e.target.value,
           filter,
         });

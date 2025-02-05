@@ -8,9 +8,13 @@ import {
   LOGIN_ROUTE,
   REGISTER_ROUTE,
   ROOT,
+  ACCEPTED_FRIENDS_ROUTE,
+  PENDING_REQUESTS_ROUTE,
 } from "./routerPath";
 import Home from "../pages/home/Home";
 import Auth from "../pages/authentication/Auth";
+import AcceptedFriends from "../pages/social/AcceptedFriends";
+import PendingRequests from "../pages/social/PendingRequests";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +24,14 @@ const router = createBrowserRouter([
       {
         path: HOME_ROUTE,
         element: <Home />,
+      },
+      {
+        path: ACCEPTED_FRIENDS_ROUTE,
+        element: <AcceptedFriends />,
+      },
+      {
+        path: PENDING_REQUESTS_ROUTE,
+        element: <PendingRequests />,
       },
     ],
   },

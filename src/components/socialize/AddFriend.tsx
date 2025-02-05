@@ -1,12 +1,15 @@
-import { X, UserPlus, MessageCircle } from "lucide-react";
+import { X, UserPlus } from "lucide-react";
 import { useAddFriendStore } from "../../store/addFriendStore";
 import { AddFriendStoreValues } from "../../types/store";
 
-type AddFriendProps = AddFriendStoreValues;
+type AddFriendProps = Omit<AddFriendStoreValues, "isActive">;
 
-const AddFriend = ({ username, imageUrl, id, isAccepted }: AddFriendProps) => {
-  console.log(id, isAccepted);
-  const { toggleVisibility } = useAddFriendStore();
+const AddFriend = ({ username, imageUrl, id }: AddFriendProps) => {
+  const toggleVisibility = useAddFriendStore((state) => state.toggleVisibility);
+  const sendFriendRequest = useAddFriendStore(
+    (state) => state.sendFriendRequest
+  );
+
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center p-4">
       <div className="w-full max-w-sm bg-white dark:bg-gray-800 rounded-xl shadow-md relative">
@@ -35,17 +38,13 @@ const AddFriend = ({ username, imageUrl, id, isAccepted }: AddFriendProps) => {
         </div>
 
         <div className="p-4 flex gap-3">
-          {!isAccepted ? (
-            <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full py-2 flex items-center justify-center gap-2">
-              <UserPlus size={16} />
-              Add Friend
-            </button>
-          ) : (
-            <button className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-full py-2 flex items-center justify-center gap-2 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white">
-              <MessageCircle size={16} />
-              Message
-            </button>
-          )}
+          <button
+            onClick={() => sendFriendRequest(id)}
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full py-2 flex items-center justify-center gap-2"
+          >
+            <UserPlus size={16} />
+            Add Friend
+          </button>
         </div>
       </div>
     </div>
