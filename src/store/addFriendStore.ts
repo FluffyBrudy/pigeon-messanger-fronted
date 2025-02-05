@@ -28,9 +28,6 @@ export const useAddFriendStore = create<IAddFriendStore>()((set, get) => ({
       const response = await api.post(SOCIAL_FRIEND_REQUEST_POST, {
         friendId,
       });
-      if (response.status === 200) {
-        console.log(response);
-      }
       return response;
     } catch (error) {
       console.error(error);
