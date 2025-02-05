@@ -21,7 +21,6 @@ export const useAuthStore = create<IAuthStore>((set) => ({
       const res = await api.post(SILENT_LOGIN_POST);
       if (res.status === 200)
         set({ isAuthenticated: true, userId: res.data.data["id"] as string });
-      console.log(res.data.data.id);
       return res;
     } catch (error) {
       console.log(error);
