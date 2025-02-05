@@ -1,18 +1,26 @@
-export interface SearchedFriend {
+export interface Friend {
   id: string;
   username: string;
   imageUrl: string;
   isAccepted?: boolean;
 }
 
-export type PendingFriendRequest = {
+export type SearchedFriend = Friend;
+
+export type FriendRequestReponse = {
   username: string;
   imageUrl: string;
-  id: string;
+  userId: string;
 };
 
 export type AddFriendResponse = string;
 
-export type PendingFriendRequestsResponse = PendingFriendRequest[];
+export type PendingFriendRequestsResponse = FriendRequestReponse[];
+export type AcceptedFriendRequestsResponse = FriendRequestReponse[];
 
 export type AcceptFriendRequestResponse = { isAccepted: boolean };
+
+export enum PendingRequestType {
+  sent = "sent",
+  recv = "recv",
+}

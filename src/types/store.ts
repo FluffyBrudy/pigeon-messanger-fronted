@@ -18,7 +18,7 @@ export interface IFriendSearchStore {
 
 export type AddFriendStoreValues = Omit<
   IAddFriendStore,
-  "toggleVisibility" | "updateFriendData" | "getData"
+  "toggleVisibility" | "updateFriendData" | "getData" | "sendFriendRequest"
 >;
 export interface IAddFriendStore {
   id: string;
@@ -29,4 +29,5 @@ export interface IAddFriendStore {
   updateFriendData: (data: AddFriendStoreValues) => void;
   toggleVisibility: () => void;
   getData: () => AddFriendStoreValues;
+  sendFriendRequest: (friendId: string) => Promise<AxiosResponse | AxiosError>;
 }
