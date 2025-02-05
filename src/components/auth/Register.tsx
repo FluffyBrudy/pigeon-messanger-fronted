@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { object as yobject, string as ystring, ref as yref } from "yup";
 import { LOGIN_ROUTE } from "../../router/routerPath";
 import { api } from "../../api/interceptor";
-import { REGISTER_ENDPOINT_POST } from "../../api/endpoints";
+import { AUTH_REGISTER_POST } from "../../api/endpoints";
 import { useState } from "react";
 import { FieldWrapper } from "../form/FieldWrapper";
 
@@ -35,7 +35,7 @@ const Register = () => {
   const handleSubmit = ({ username, email, password }: SubmitValues) => {
     setIsLoading(true);
     api
-      .post(REGISTER_ENDPOINT_POST, { username, email, password })
+      .post(AUTH_REGISTER_POST, { username, email, password })
       .then(() => {
         setIsLoading(false);
         navigation(LOGIN_ROUTE);
