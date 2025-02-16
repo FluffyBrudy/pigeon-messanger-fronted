@@ -19,5 +19,8 @@ export const useConnectedFriendStore = create<IConnectedFriendsStore>()(
         console.error((err as Error).message);
       }
     },
+    setActiveChatId(id) {
+      set({ activeChatId: id });
+    },
   })
 );

@@ -1,10 +1,10 @@
 import { useCallback } from "react";
 import { useSearchFriendStore } from "../../store/friendSearchStore";
 import { useAddFriendStore } from "../../store/addFriendStore";
+import { SearchedFriend } from "../../types/social";
 import FindFriends from "../socialize/FindFriends";
 import ChatBubble from "./ChatBubble";
-import { SearchedFriend } from "../../types/social";
-import ConnectedFriendChatBubble from "./ConnectedFriendChatBubble";
+import ConnectedFriends from "./ConnectedFriends";
 
 const ChatBubbleSidebar = () => {
   const { searchedFriend } = useSearchFriendStore();
@@ -42,7 +42,7 @@ const ChatBubbleSidebar = () => {
         </div>
       </div>
       <div className="w-full">
-        <ConnectedFriendChatBubble />
+        <ConnectedFriends />
       </div>
     </div>
   );

@@ -37,7 +37,8 @@ export interface IAddFriendStore {
 export interface IConnectedFriendsStore {
   activeChatId: string | null; //when user is clicked, it is considered to be active chat that user is chatting with
   connectedFriends: Array<ConnectedFriend>;
-  fetchConnectedFriends: (friends: ConnectedFriend) => Promise<void>;
+  fetchConnectedFriends: () => Promise<void>;
+  setActiveChatId: (id: string) => void;
 }
 
 export interface INotifcationStore {
