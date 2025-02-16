@@ -16,7 +16,6 @@ interface IPendingRequestsStore {
 export const usePendingRequestsStore = create<IPendingRequestsStore>((set) => ({
   sentRequests: [],
   recvRequests: [],
-
   fetchPendingRequests: async (reqType) => {
     try {
       const { data } = await api.get(SOCIAL_PENDING_REQUESTS_GET, {

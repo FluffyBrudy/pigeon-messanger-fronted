@@ -45,6 +45,7 @@ const Login = () => {
         if (res.status === 200) {
           setAuthenticated(true);
           localStorage.setItem(ACCESS_TOKEN, res.data?.data[ACCESS_TOKEN]);
+          localStorage.setItem("id", res.data?.data["id"]);
         }
         navigation(HOME_ROUTE);
       })

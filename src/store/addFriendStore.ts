@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { AddFriendStoreValues, IAddFriendStore } from "../types/store";
 import { api } from "../api/interceptor";
 import { SOCIAL_FRIEND_REQUEST_POST } from "../api/endpoints";
-import { AxiosError } from "axios";
 
 const defaultValue: AddFriendStoreValues = {
   id: "",
@@ -28,10 +27,10 @@ export const useAddFriendStore = create<IAddFriendStore>()((set, get) => ({
       const response = await api.post(SOCIAL_FRIEND_REQUEST_POST, {
         friendId,
       });
-      return response;
+      return response["data"]["data"] || null;
     } catch (error) {
       console.error(error);
-      return error as AxiosError;
+      return null;
     }
   },
 }));

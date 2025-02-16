@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, Home, Users, Bell, UserPlus } from "lucide-react";
+import { Menu, Home, Users, UserPlus } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import {
   ACCEPTED_FRIENDS_ROUTE,
@@ -11,7 +11,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-white dark:bg-gray-900 shadow-md relative">
+    <nav className="w-full shadow-md relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
@@ -31,9 +31,6 @@ const Navbar = () => {
             </NavLink>
             <NavLink to="/pending-requests">
               <UserPlus size={20} /> Requests
-            </NavLink>
-            <NavLink to="/notifications">
-              <Bell size={20} /> Notifications
             </NavLink>
           </div>
           <button
@@ -55,9 +52,6 @@ const Navbar = () => {
           </NavLink>
           <NavLink to={PENDING_REQUESTS_ROUTE} className="flex items-center">
             <UserPlus size={20} className="mr-2" /> Requests
-          </NavLink>
-          <NavLink to="/notifications" className="flex items-center">
-            <Bell size={20} className="mr-2" /> Notifications
           </NavLink>
         </div>
       )}

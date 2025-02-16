@@ -1,9 +1,7 @@
 import React, { useState, ChangeEvent, MouseEvent } from "react";
-import { useSocket } from "../../hooks/useSocket";
 
 const MessengeInputBox: React.FC = () => {
   const [message, setMessage] = useState<string>("");
-  const { socket } = useSocket();
 
   const handleMessageChange = (event: ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);
@@ -12,10 +10,6 @@ const MessengeInputBox: React.FC = () => {
   const handleSendMessage = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (message.trim() !== "") {
-      if (socket) {
-        socket.emit("hello", message);
-      }
-      console.log("Sent Message:", message);
       setMessage("");
     }
   };

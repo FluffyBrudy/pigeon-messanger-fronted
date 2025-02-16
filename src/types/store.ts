@@ -1,5 +1,7 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { SearchedFriend } from "./social";
+import { Notification } from "./notifications";
+import { ConnectedFriend } from "./user";
 
 export interface IAuthStore {
   userId: string | null;
@@ -29,5 +31,22 @@ export interface IAddFriendStore {
   updateFriendData: (data: AddFriendStoreValues) => void;
   toggleVisibility: () => void;
   getData: () => AddFriendStoreValues;
-  sendFriendRequest: (friendId: string) => Promise<AxiosResponse | AxiosError>;
+  sendFriendRequest: (friendId: string) => Promise<string>;
+}
+
+export interface IConnectedFriendsStore {
+  activeChatId: string | null; //when user is clicked, it is considered to be active chat that user is chatting with
+  connectedFriends: Array<ConnectedFriend>;
+  fetchConnectedFriends: (friends: ConnectedFriend) => Promise<void>;
+}
+
+export interface INotifcationStore {
+  isVisible: boolean;
+  nextId: number;
+  notifications: Array<Notification>;
+  toAlert: boolean;
+  count: number;
+  setNotification: (notificationData: Omit<Notification, "id">) => void;
+  removeNotification: (nid: Notification["id"]) => void;
+  toggleNotification: () => void;
 }

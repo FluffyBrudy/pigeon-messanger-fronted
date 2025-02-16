@@ -7,6 +7,8 @@ import {
   SOCIAL_REJECT_REQUEST_POST,
   SOCIAL_ACCEPT_REQUEST_POST,
 } from "../../api/endpoints";
+import { SocketSingleton } from "../../socket/socket";
+import { SERVER_EVENTS } from "../../socket/constants";
 
 const PendingRequests = () => {
   const fetchPendingRequests = usePendingRequestsStore(
@@ -38,6 +40,7 @@ const PendingRequests = () => {
       .then((res) => {
         if (res.status === 200) {
           filterPendingRequest(friendId);
+          SocketSingleton.emitEvent(SERVER_EVENTS.CONNECT_FRIEND);
         }
       })
       .catch((err) => {
