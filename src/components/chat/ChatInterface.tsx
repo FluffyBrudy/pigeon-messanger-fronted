@@ -71,7 +71,7 @@ const ChatInterface = () => {
       cursorId.current = data.cursor;
       if (data.chats.length === 0) setDisableLoadMore(true);
     } catch (err) {
-      alert((err as Error).message);
+      console.error((err as Error).message);
     }
   };
 
