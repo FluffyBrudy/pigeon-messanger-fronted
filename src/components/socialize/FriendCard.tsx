@@ -13,7 +13,6 @@ const FriendCard: React.FC<FriendCardProps> = ({
   isAccepted,
   children,
 }) => {
-  console.log(id);
   return (
     <div className="w-[90%] flex items-center justify-center flex-wrap gap-4 bg-white shadow-md rounded-lg p-4 transition hover:shadow-lg">
       <img

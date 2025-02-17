@@ -13,7 +13,6 @@ const AcceptedFriends = () => {
       try {
         const response = await api.get(SOCIAL_ACCEPTED_REQUESTS_GET);
         setFriends(response.data.data);
-        console.log(response);
       } catch (error) {
         console.error(error);
       }
