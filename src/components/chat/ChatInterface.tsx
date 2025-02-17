@@ -8,6 +8,8 @@ import {
   CHAT_MESSAGE_FETCH_POST,
 } from "../../api/endpoints";
 import MessageBubble from "./MessageBubble";
+import { SocketSingleton } from "../../socket/socket";
+import { SERVER_EVENTS } from "../../socket/constants";
 
 const ChatInterface = () => {
   const { activeChatId, chatMessages } = useConnectedFriendStore();
@@ -16,6 +18,7 @@ const ChatInterface = () => {
   );
   const [msgInput, setMsgInput] = useState("");
   const [disableLoadMore, setDisableLoadMore] = useState(false);
+  const msgEndRef = useRef<HTMLDivElement | null>(null);
   const userId = useRef(localStorage.getItem("id"));
   const cursorId = useRef<string | undefined>(undefined);
 
@@ -39,6 +42,13 @@ const ChatInterface = () => {
     fetchMsgs();
   }, [activeChatId, setChatMessages]);
 
+  useEffect(() => {
+    const chatContainer = msgEndRef.current?.parentElement;
+    if (chatContainer) {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+  }, [chatMessages]);
+
   const handleSend = async () => {
     if (msgInput.trim().length === 0) return;
     try {
@@ -47,9 +57,13 @@ const ChatInterface = () => {
         message: msgInput,
       });
       if (msgResponse.status === 200) {
-        const { creatorId, message, id } = msgResponse.data
+        const { creatorId, message } = msgResponse.data
           .data as CreateChatMessageResponse;
-        console.log(id);
+        SocketSingleton.emitEvent(SERVER_EVENTS.CHAT_MESSAGE, {
+          creatorId: userId.current,
+          message: msgInput,
+          recipientId: [activeChatId],
+        });
         setChatMessages([{ creatorId, messageBody: message }], "a");
         setMsgInput("");
       }
@@ -68,6 +82,7 @@ const ChatInterface = () => {
       const data = response.data.data as FetchChatResponse;
 
       setChatMessages(data.chats.reverse(), "p");
+
       cursorId.current = data.cursor;
       if (data.chats.length === 0) setDisableLoadMore(true);
     } catch (err) {
@@ -83,7 +98,7 @@ const ChatInterface = () => {
             load more...
           </button>
         )}
-        <div>
+        <div ref={msgEndRef}>
           {chatMessages.map((chat, i) => (
             <MessageBubble
               key={i}

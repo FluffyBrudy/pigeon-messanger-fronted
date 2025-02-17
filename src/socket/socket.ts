@@ -8,7 +8,6 @@ export class SocketSingleton {
   private constructor() {}
 
   static getInstance() {
-    return null;
     if (!SocketSingleton.instance) {
       SocketSingleton.instance = io(import.meta.env.VITE_SOCKET_API, {
         auth: {
@@ -36,12 +35,14 @@ export class SocketSingleton {
     }
   }
 
-  static emitEvent(eventName: string, ...data: Array<unknown>) {
+  static emitEvent(eventName: string, data: unknown) {
     if (!this.instance) {
       console.error("Unable to connect to socket server");
       return;
     }
-    this.instance?.emit(eventName, data);
+    this.instance?.emit(eventName, data, (response: unknown) => {
+      console.log(response);
+    });
   }
 
   static connectSocket() {

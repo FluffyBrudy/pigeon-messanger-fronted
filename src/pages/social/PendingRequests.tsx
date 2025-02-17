@@ -9,6 +9,7 @@ import {
 } from "../../api/endpoints";
 import { SocketSingleton } from "../../socket/socket";
 import { SERVER_EVENTS } from "../../socket/constants";
+import { useConnectedFriendStore } from "../../store/connectedFriendsStore";
 
 const PendingRequests = () => {
   const fetchPendingRequests = usePendingRequestsStore(
@@ -19,6 +20,9 @@ const PendingRequests = () => {
   );
   const sentRequests = usePendingRequestsStore((state) => state.sentRequests);
   const recvRequests = usePendingRequestsStore((state) => state.recvRequests);
+  const fetchConnectedFriends = useConnectedFriendStore(
+    (state) => state.fetchConnectedFriends
+  );
 
   const [activeTab, setActiveTab] = useState<PendingRequestType>(
     PendingRequestType.recv
@@ -40,7 +44,7 @@ const PendingRequests = () => {
       .then((res) => {
         if (res.status === 200) {
           filterPendingRequest(friendId);
-          SocketSingleton.emitEvent(SERVER_EVENTS.CONNECT_FRIEND);
+          SocketSingleton.emitEvent(SERVER_EVENTS.CONNECT_FRIEND, { friendId });
         }
       })
       .catch((err) => {
@@ -127,7 +131,10 @@ const PendingRequests = () => {
                 isAccepted={false}
               >
                 <button
-                  onClick={() => acceptRequest(request.userId)}
+                  onClick={() => {
+                    acceptRequest(request.userId);
+                    fetchConnectedFriends();
+                  }}
                   className="px-4 py-1 text-sm font-medium bg-lime-500 text-black rounded-md shadow-sm hover:bg-lime-600 transition"
                 >
                   Accept

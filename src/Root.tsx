@@ -11,6 +11,8 @@ import { SocketSingleton } from "./socket/socket";
 import { GlobalNotification } from "./components/notifications/GlobalNotification";
 import { CLIENT_EVENTS, SERVER_EVENTS } from "./socket/constants";
 import { useNotificationStore } from "./store/notificationStore";
+import { useConnectedFriendStore } from "./store/connectedFriendsStore";
+import { MessageTypeRecieverData } from "./types/socketData";
 
 const Root = () => {
   const attemptAuthorization = useAuthStore(
@@ -21,12 +23,15 @@ const Root = () => {
   const setNotification = useNotificationStore(
     (state) => state.setNotification
   );
+  const setChatMessages = useConnectedFriendStore(
+    (state) => state.setChatMessages
+  );
 
   useEffect(() => {
     const reAuthorize = async () => {
       const res = await attemptAuthorization();
       if (res.status === 200) {
-        console.log(SocketSingleton.connectSocket());
+        SocketSingleton.connectSocket();
         navigation(HOME_ROUTE);
       } else {
         navigation(LOGIN_ROUTE);
@@ -40,38 +45,40 @@ const Root = () => {
     const socketInstance = SocketSingleton.getInstance();
     if (!socketInstance) return;
 
-    const userEvent = "user_" + localStorage.getItem("id")!;
     socketInstance.on(CLIENT_EVENTS.CONNECT, () => {
       SocketSingleton.active();
-      console.log(SocketSingleton.getStatus());
     });
-
-    socketInstance.on(CLIENT_EVENTS.UNAUTHORIZED, (data: unknown) => {
-      console.error(data, "*");
-    });
-
-    socketInstance.on(CLIENT_EVENTS.AUTHORIZED, () => {});
 
     socketInstance.on(
-      userEvent,
-      (data: { eventName: string; data: unknown }) => {
+      CLIENT_EVENTS.NOTIFICATION,
+      (data: { eventName: string }) => {
         const eventName = data.eventName;
         if (eventName === SERVER_EVENTS.CONNECT_FRIEND) {
           setNotification({
-            message: "You got new friend request",
+            message: "someone sent you friend request",
             redirectTo: PENDING_REQUESTS_ROUTE,
           });
         }
       }
     );
 
-    socketInstance.on(CLIENT_EVENTS.NOTIFICATION, () => {});
+    socketInstance.on(
+      CLIENT_EVENTS.CHAT_MESSAGE_RECEIVER,
+      (data: MessageTypeRecieverData) => {
+        if (data.eventName === SERVER_EVENTS.CHAT_MESSAGE) {
+          setChatMessages(
+            [{ creatorId: data.creatorId, messageBody: data.message }],
+            "a"
+          );
+        }
+      }
+    );
 
     socketInstance.on(CLIENT_EVENTS.ERRORS, (error) => {
-      console.error(error.message, "*");
+      console.error("Error occured: ", error.message);
       SocketSingleton.disconnect();
     });
-  }, [isAuthenticated, setNotification]);
+  }, [isAuthenticated, setNotification, setChatMessages]);
 
   if (!isAuthenticated) return null;
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Friend } from "../../types/social";
-import { CheckCircle, User } from "lucide-react"; // Importing icons from lucide-react
+import { CheckCircle, User } from "lucide-react";
 
 interface FriendCardProps extends Friend {
   children?: React.ReactNode;

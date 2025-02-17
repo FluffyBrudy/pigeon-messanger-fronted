@@ -33,7 +33,7 @@ const MessageInputBox: FC<MessageInputBoxProps> = ({
         onChange={handleMessageChange}
         onKeyUp={handleEnterPress}
         placeholder="Type a message..."
-        className="w-full p-2 border rounded-full"
+        className="w-full p-2 border rounded-full outline-none focus:border-lime-600"
       />
       <button
         onClick={handleSubmit}

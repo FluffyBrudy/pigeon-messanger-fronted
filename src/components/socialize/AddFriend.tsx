@@ -1,6 +1,8 @@
 import { X, UserPlus } from "lucide-react";
 import { useAddFriendStore } from "../../store/addFriendStore";
 import { AddFriendStoreValues } from "../../types/store";
+import { SocketSingleton } from "../../socket/socket";
+import { SERVER_EVENTS } from "../../socket/constants";
 
 type AddFriendProps = Omit<AddFriendStoreValues, "isActive">;
 
@@ -12,9 +14,8 @@ const AddFriend = ({ username, imageUrl, id }: AddFriendProps) => {
 
   const handleRequest = async (id: string) => {
     try {
-      const response = await sendFriendRequest(id);
-      console.log(response);
-      console.log(id);
+      await sendFriendRequest(id);
+      SocketSingleton.emitEvent(SERVER_EVENTS.CONNECT_FRIEND, { friendId: id });
       toggleVisibility();
     } catch (err) {
       console.error((err as Error).message);
