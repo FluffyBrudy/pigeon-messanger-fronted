@@ -7,6 +7,7 @@ import { ConnectedFriend } from "../types/user";
 export const useConnectedFriendStore = create<IConnectedFriendsStore>()(
   (set) => ({
     activeChatId: null,
+    chatMessages: [],
     connectedFriends: [],
     async fetchConnectedFriends() {
       try {
@@ -21,6 +22,20 @@ export const useConnectedFriendStore = create<IConnectedFriendsStore>()(
     },
     setActiveChatId(id) {
       set({ activeChatId: id });
+    },
+
+    setChatMessages(messages, order) {
+      if (order === "a") {
+        set(({ chatMessages }) => ({
+          chatMessages: [...chatMessages, ...messages],
+        }));
+      } else if (order === "p") {
+        set(({ chatMessages }) => ({
+          chatMessages: [...messages, ...chatMessages],
+        }));
+      } else {
+        set({ chatMessages: messages });
+      }
     },
   })
 );

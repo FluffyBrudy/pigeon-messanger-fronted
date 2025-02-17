@@ -2,6 +2,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import { SearchedFriend } from "./social";
 import { Notification } from "./notifications";
 import { ConnectedFriend } from "./user";
+import { FetchChatMessageResponse } from "./chat";
 
 export interface IAuthStore {
   userId: string | null;
@@ -36,9 +37,14 @@ export interface IAddFriendStore {
 
 export interface IConnectedFriendsStore {
   activeChatId: string | null; //when user is clicked, it is considered to be active chat that user is chatting with
+  chatMessages: Array<FetchChatMessageResponse>;
   connectedFriends: Array<ConnectedFriend>;
   fetchConnectedFriends: () => Promise<void>;
   setActiveChatId: (id: string) => void;
+  setChatMessages: (
+    messages: Array<FetchChatMessageResponse>,
+    order?: "a" | "p"
+  ) => void;
 }
 
 export interface INotifcationStore {

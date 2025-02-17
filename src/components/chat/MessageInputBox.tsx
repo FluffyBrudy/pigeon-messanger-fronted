@@ -1,17 +1,28 @@
-import React, { useState, ChangeEvent, MouseEvent } from "react";
+import {
+  FC,
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  KeyboardEvent,
+} from "react";
 
-const MessengeInputBox: React.FC = () => {
-  const [message, setMessage] = useState<string>("");
+interface MessageInputBoxProps {
+  message: string;
+  setMessage: Dispatch<SetStateAction<string>>;
+  handleSubmit: () => Promise<void>;
+}
 
+const MessageInputBox: FC<MessageInputBoxProps> = ({
+  message,
+  setMessage,
+  handleSubmit,
+}) => {
   const handleMessageChange = (event: ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);
   };
 
-  const handleSendMessage = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    if (message.trim() !== "") {
-      setMessage("");
-    }
+  const handleEnterPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") handleSubmit();
   };
 
   return (
@@ -20,11 +31,12 @@ const MessengeInputBox: React.FC = () => {
         type="text"
         value={message}
         onChange={handleMessageChange}
+        onKeyUp={handleEnterPress}
         placeholder="Type a message..."
         className="w-full p-2 border rounded-full"
       />
       <button
-        onClick={handleSendMessage}
+        onClick={handleSubmit}
         disabled={message.trim() === ""}
         className="p-2 ml-2 bg-blue-500 text-white rounded-md w-[100px]"
       >
@@ -34,4 +46,4 @@ const MessengeInputBox: React.FC = () => {
   );
 };
 
-export default MessengeInputBox;
+export default MessageInputBox;
