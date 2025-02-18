@@ -92,7 +92,7 @@ const ChatInterface = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto w-full mx-auto lg:w-[60%] sm:w-full">
         {chatMessages.length > 0 && !disableLoadMore && (
           <button onClick={handleLoadMore} className="opacity-50 block mx-auto">
             load more...
@@ -110,11 +110,13 @@ const ChatInterface = () => {
       </div>
 
       <div className="flex-shrink-0 p-2 min-h-[80px]">
-        <MessengeInputBox
-          setMessage={setMsgInput}
-          message={msgInput}
-          handleSubmit={handleSend}
-        />
+        {activeChatId && (
+          <MessengeInputBox
+            setMessage={setMsgInput}
+            message={msgInput}
+            handleSubmit={handleSend}
+          />
+        )}
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import {
   SetStateAction,
   KeyboardEvent,
 } from "react";
+import { Send } from "lucide-react";
 
 interface MessageInputBoxProps {
   message: string;
@@ -26,21 +27,21 @@ const MessageInputBox: FC<MessageInputBoxProps> = ({
   };
 
   return (
-    <div className="flex w-full h-full">
+    <div className="flex items-center bg-white p-3 rounded-full w-[min(800px,100%)] mx-auto border border-gray-200 shadow-sm">
       <input
         type="text"
         value={message}
         onChange={handleMessageChange}
-        onKeyUp={handleEnterPress}
+        onKeyDown={handleEnterPress}
         placeholder="Type a message..."
-        className="w-full p-2 border rounded-full outline-none focus:border-lime-600"
+        className="flex-1 px-4 py-2 bg-transparent outline-none text-gray-900 placeholder-gray-500"
       />
       <button
         onClick={handleSubmit}
         disabled={message.trim() === ""}
-        className="p-2 ml-2 bg-blue-500 text-white rounded-md w-[100px]"
+        className="p-2 rounded-full bg-blue-500 hover:bg-blue-600 text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
       >
-        Send
+        <Send size={22} />
       </button>
     </div>
   );

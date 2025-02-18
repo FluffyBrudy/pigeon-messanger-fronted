@@ -42,42 +42,52 @@ const Root = () => {
 
   useEffect(() => {
     if (!isAuthenticated) return;
+
     const socketInstance = SocketSingleton.getInstance();
     if (!socketInstance) return;
 
-    socketInstance.on(CLIENT_EVENTS.CONNECT, () => {
+    const handleConnect = () => {
       SocketSingleton.active();
-    });
+    };
 
-    socketInstance.on(
-      CLIENT_EVENTS.NOTIFICATION,
-      (data: { eventName: string }) => {
-        const eventName = data.eventName;
-        if (eventName === SERVER_EVENTS.CONNECT_FRIEND) {
-          setNotification({
-            message: "someone sent you friend request",
-            redirectTo: PENDING_REQUESTS_ROUTE,
-          });
-        }
+    const handleNotification = (data: { eventName: string }) => {
+      if (data.eventName === SERVER_EVENTS.CONNECT_FRIEND) {
+        setNotification({
+          message: "Someone sent you a friend request",
+          redirectTo: PENDING_REQUESTS_ROUTE,
+        });
       }
-    );
+    };
 
-    socketInstance.on(
-      CLIENT_EVENTS.CHAT_MESSAGE_RECEIVER,
-      (data: MessageTypeRecieverData) => {
-        if (data.eventName === SERVER_EVENTS.CHAT_MESSAGE) {
-          setChatMessages(
-            [{ creatorId: data.creatorId, messageBody: data.message }],
-            "a"
-          );
-        }
+    const handleChatMessage = (data: MessageTypeRecieverData) => {
+      if (data.eventName === SERVER_EVENTS.CHAT_MESSAGE) {
+        console.log("checkl");
+        setChatMessages(
+          [{ creatorId: data.creatorId, messageBody: data.message }],
+          "a"
+        );
       }
-    );
+    };
 
-    socketInstance.on(CLIENT_EVENTS.ERRORS, (error) => {
-      console.error("Error occured: ", error.message);
+    const handleError = (error: unknown) => {
+      console.error("Error occurred: ", (error as Error).message);
       SocketSingleton.disconnect();
-    });
+    };
+
+    socketInstance.on(CLIENT_EVENTS.CONNECT, handleConnect);
+    socketInstance.on(CLIENT_EVENTS.NOTIFICATION, handleNotification);
+    socketInstance.on(CLIENT_EVENTS.CHAT_MESSAGE_RECEIVER, handleChatMessage);
+    socketInstance.on(CLIENT_EVENTS.ERRORS, handleError);
+
+    return () => {
+      socketInstance.off(CLIENT_EVENTS.CONNECT, handleConnect);
+      socketInstance.off(CLIENT_EVENTS.NOTIFICATION, handleNotification);
+      socketInstance.off(
+        CLIENT_EVENTS.CHAT_MESSAGE_RECEIVER,
+        handleChatMessage
+      );
+      socketInstance.off(CLIENT_EVENTS.ERRORS, handleError);
+    };
   }, [isAuthenticated, setNotification, setChatMessages]);
 
   if (!isAuthenticated) return null;

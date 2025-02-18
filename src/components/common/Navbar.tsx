@@ -17,9 +17,9 @@ const Navbar = () => {
           <div className="flex items-center">
             <NavLink
               to="/home"
-              className="text-xl font-bold text-gray-900 dark:text-white"
+              className="uppercase text-xl font-bold text-gray-900"
             >
-              MyApp
+              Pigeon&nbsp;Messanger
             </NavLink>
           </div>{" "}
           <div className="hidden  space-x-6 md:flex">
@@ -35,7 +35,7 @@ const Navbar = () => {
           </div>
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-md text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
+            className="md:hidden p-2 rounded-md text-gray-500  hover:bg-gray-200 "
           >
             <Menu size={24} />
           </button>
@@ -43,7 +43,7 @@ const Navbar = () => {
       </div>
 
       {isOpen && (
-        <div className="md:hidden flex flex-col fixed  bg-gray-800 dark:bg-gray-900 w-full z-10 py-4 px-6 space-y-4">
+        <div className="md:hidden flex flex-col fixed  bg-gray-800 w-full z-10 py-4 px-6 space-y-4">
           <NavLink to={HOME_ROUTE} className="flex items-center">
             <Home size={20} className="mr-2" /> Home
           </NavLink>
