@@ -45,6 +45,11 @@ const ConnectedFriends = () => {
     setMessages((state) => ({ ...state, [latestMsg.id]: latestMsg.message }));
   }, [latestMsg]);
 
+  useEffect(() => {
+    if (connectedFriends.length === 0) return;
+    setActiveChatId(connectedFriends[0].userId);
+  }, [setActiveChatId, connectedFriends]);
+
   return (
     <div>
       {connectedFriends.map((friend) => (

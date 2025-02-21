@@ -19,6 +19,7 @@ const Root = () => {
     (state) => state.attemptAuthorization
   );
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const activeChatId = useConnectedFriendStore((state) => state.activeChatId);
   const navigation = useNavigate();
   const setNotification = useNotificationStore(
     (state) => state.setNotification
@@ -64,11 +65,12 @@ const Root = () => {
 
     const handleChatMessage = (data: MessageTypeRecieverData) => {
       if (data.eventName === SERVER_EVENTS.CHAT_MESSAGE) {
-        console.log("checkl");
-        setChatMessages(
-          [{ creatorId: data.creatorId, messageBody: data.message }],
-          "a"
-        );
+        if (activeChatId === data.creatorId) {
+          setChatMessages(
+            [{ creatorId: data.creatorId, messageBody: data.message }],
+            "a"
+          );
+        }
         setLatestMsg(data.creatorId, data.message);
       }
     };
@@ -92,7 +94,13 @@ const Root = () => {
       );
       socketInstance.off(CLIENT_EVENTS.ERRORS, handleError);
     };
-  }, [isAuthenticated, setNotification, setChatMessages, setLatestMsg]);
+  }, [
+    isAuthenticated,
+    setNotification,
+    setChatMessages,
+    setLatestMsg,
+    activeChatId,
+  ]);
 
   if (!isAuthenticated) return null;
 
