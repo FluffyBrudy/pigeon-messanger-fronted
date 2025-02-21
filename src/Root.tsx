@@ -26,6 +26,9 @@ const Root = () => {
   const setChatMessages = useConnectedFriendStore(
     (state) => state.setChatMessages
   );
+  const setLatestMsg = useConnectedFriendStore(
+    (state) => state.setLatestMessage
+  );
 
   useEffect(() => {
     const reAuthorize = async () => {
@@ -66,6 +69,7 @@ const Root = () => {
           [{ creatorId: data.creatorId, messageBody: data.message }],
           "a"
         );
+        setLatestMsg(data.creatorId, data.message);
       }
     };
 
@@ -88,7 +92,7 @@ const Root = () => {
       );
       socketInstance.off(CLIENT_EVENTS.ERRORS, handleError);
     };
-  }, [isAuthenticated, setNotification, setChatMessages]);
+  }, [isAuthenticated, setNotification, setChatMessages, setLatestMsg]);
 
   if (!isAuthenticated) return null;
 

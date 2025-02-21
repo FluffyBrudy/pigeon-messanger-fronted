@@ -10,5 +10,6 @@ export const SOCIAL_REJECT_REQUEST_POST = "/social/friends/requests/reject";
 
 export const CHAT_MESSAGE_CREATE_POST = "/chat/message/create";
 export const CHAT_MESSAGE_FETCH_POST = "/chat/message/fetch";
+export const LATEST_SINGLE_CHAT_MESSAGES = "/chat/message/fetch/latest";
 
 export const SILENT_LOGIN_POST = "/silent/login";

@@ -16,6 +16,9 @@ const ChatInterface = () => {
   const setChatMessages = useConnectedFriendStore(
     (state) => state.setChatMessages
   );
+  const setLatestMessage = useConnectedFriendStore(
+    (state) => state.setLatestMessage
+  );
   const [msgInput, setMsgInput] = useState("");
   const [disableLoadMore, setDisableLoadMore] = useState(false);
   const msgEndRef = useRef<HTMLDivElement | null>(null);
@@ -51,6 +54,7 @@ const ChatInterface = () => {
 
   const handleSend = async () => {
     if (msgInput.trim().length === 0) return;
+    if (!activeChatId) return;
     try {
       const msgResponse = await api.post(CHAT_MESSAGE_CREATE_POST, {
         recipientId: activeChatId,
@@ -65,6 +69,7 @@ const ChatInterface = () => {
           recipientId: [activeChatId],
         });
         setChatMessages([{ creatorId, messageBody: message }], "a");
+        setLatestMessage(activeChatId, message);
         setMsgInput("");
       }
     } catch (err) {
