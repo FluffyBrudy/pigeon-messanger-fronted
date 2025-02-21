@@ -15,8 +15,10 @@ export interface IFriendSearchStore {
   error: string;
   searchTerm: string;
   searchedFriend: Array<SearchedFriend>;
+  isVisible: boolean;
   setError: (error: string) => void;
   setSearchedFriend: (friends: Array<SearchedFriend>) => void;
+  setSearchedvisibility: (state: boolean) => void;
 }
 
 export type AddFriendStoreValues = Omit<

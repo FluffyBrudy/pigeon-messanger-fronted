@@ -6,9 +6,11 @@ interface ChatBubbleProps {
   username: string;
   text: string;
   handleClick: CallableFunction;
+  isTextBold?: boolean;
 }
 
 const ChatBubble = ({
+  isTextBold = false,
   imageUrl,
   username,
   text,
@@ -22,7 +24,9 @@ const ChatBubble = ({
       <ImageBubble src={imageUrl} />
       <div className="relative p-2">
         <p className="font-bold">{username}</p>
-        <TextBubble text={text} />
+        <div className={`${isTextBold ? "font-bold" : ""}`}>
+          <TextBubble text={text} />
+        </div>
       </div>
     </div>
   );

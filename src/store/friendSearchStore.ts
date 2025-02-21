@@ -1,12 +1,15 @@
 import { create } from "zustand";
 import { IFriendSearchStore } from "../types/store";
 
-const defaultValue: Omit<IFriendSearchStore, "setSearchedFriend" | "setError"> =
-  {
-    error: "",
-    searchTerm: "",
-    searchedFriend: [],
-  };
+const defaultValue: Omit<
+  IFriendSearchStore,
+  "setSearchedFriend" | "setError" | "setSearchedvisibility"
+> = {
+  error: "",
+  searchTerm: "",
+  isVisible: false,
+  searchedFriend: [],
+};
 
 const useSearchFriendStore = create<IFriendSearchStore>()((set) => ({
   ...defaultValue,
@@ -15,6 +18,9 @@ const useSearchFriendStore = create<IFriendSearchStore>()((set) => ({
   },
   setError(error) {
     set({ error });
+  },
+  setSearchedvisibility(state: boolean) {
+    set({ isVisible: state });
   },
 }));
 

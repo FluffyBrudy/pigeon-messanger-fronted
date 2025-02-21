@@ -7,14 +7,18 @@ import ChatBubble from "./ChatBubble";
 import ConnectedFriends from "./ConnectedFriends";
 
 const ChatBubbleSidebar = () => {
-  const { searchedFriend } = useSearchFriendStore();
+  const { searchedFriend, isVisible } = useSearchFriendStore();
   const updateSearchFriendData = useAddFriendStore(
     (state) => state.updateFriendData
+  );
+  const setSearchedvisibility = useSearchFriendStore(
+    (state) => state.setSearchedvisibility
   );
 
   const handleClick = useCallback(
     (friendInfo: SearchedFriend) => {
       const { username, id, imageUrl, isAccepted } = friendInfo;
+      setSearchedvisibility(false);
       updateSearchFriendData({
         username,
         id,
@@ -23,7 +27,7 @@ const ChatBubbleSidebar = () => {
         isAccepted,
       });
     },
-    [updateSearchFriendData]
+    [updateSearchFriendData, setSearchedvisibility]
   );
   return (
     <div
@@ -33,15 +37,16 @@ const ChatBubbleSidebar = () => {
       <div className="sticky top-0 bg-gray-300 py-2 px-2 border-b border-gray-300">
         <FindFriends />
         <div className="sticky top-0  py-2 px-2 border-b border-gray-300 text-black">
-          {searchedFriend.map((friend, i) => (
-            <ChatBubble
-              key={i}
-              text=""
-              username={friend.username}
-              imageUrl={friend.imageUrl || ""}
-              handleClick={() => handleClick(friend)}
-            />
-          ))}
+          {isVisible &&
+            searchedFriend.map((friend, i) => (
+              <ChatBubble
+                key={i}
+                text=""
+                username={friend.username}
+                imageUrl={friend.imageUrl || ""}
+                handleClick={() => handleClick(friend)}
+              />
+            ))}
         </div>
       </div>
       <div className="w-full">

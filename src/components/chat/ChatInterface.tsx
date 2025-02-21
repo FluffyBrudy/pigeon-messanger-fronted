@@ -95,6 +95,8 @@ const ChatInterface = () => {
     }
   };
 
+  if (!activeChatId) return null;
+
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-auto w-full mx-auto lg:w-[60%] sm:w-full">

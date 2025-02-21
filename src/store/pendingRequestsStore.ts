@@ -21,14 +21,11 @@ export const usePendingRequestsStore = create<IPendingRequestsStore>((set) => ({
       const { data } = await api.get(SOCIAL_PENDING_REQUESTS_GET, {
         params: { type: reqType },
       });
-      console.log(data);
       set((state) => ({
         ...state,
         [reqType === PendingRequestType.sent ? "sentRequests" : "recvRequests"]:
           data?.data || [],
       }));
-
-      console.log("Pending Requests:", data?.data);
     } catch (err) {
       console.error("Error fetching pending requests:", err);
 

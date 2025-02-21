@@ -13,7 +13,8 @@ const ConnectedFriends = () => {
   const setActiveChatId = useConnectedFriendStore(
     (state) => state.setActiveChatId
   );
-  const { connectedFriends, latestMsg } = useConnectedFriendStore();
+  const { connectedFriends, latestMsg, activeChatId } =
+    useConnectedFriendStore();
   const [messages, setMessages] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -48,6 +49,7 @@ const ConnectedFriends = () => {
     <div>
       {connectedFriends.map((friend) => (
         <ChatBubble
+          isTextBold={!activeChatId && latestMsg?.id === friend.userId}
           key={friend.userId}
           {...friend}
           text={messages[friend.userId]}
