@@ -8,7 +8,7 @@ export interface IAuthStore {
   userId: string | null;
   isAuthenticated: boolean;
   setAuthenticated: (isAuthenticated: boolean) => void;
-  attemptAuthorization: () => Promise<AxiosResponse | AxiosError>;
+  attemptAuthorization: () => Promise<AxiosResponse | AxiosError | null>;
 }
 
 export interface IFriendSearchStore {
