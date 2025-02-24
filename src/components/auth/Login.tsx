@@ -4,11 +4,12 @@ import { object as yobject, string as ystring } from "yup";
 import { HOME_ROUTE, REGISTER_ROUTE } from "../../router/routerPath";
 import { api } from "../../api/interceptor";
 import { AUTH_LOGIN_POST } from "../../api/endpoints";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FieldWrapper } from "../form/FieldWrapper";
 import { ACCESS_TOKEN } from "../../api/constants";
 import { useAuthStore } from "../../store/authStore";
 import { EyeClosed, EyeIcon } from "lucide-react";
+import { AxiosResponse } from "axios";
 
 interface SubmitValues {
   email: string;
@@ -26,14 +27,18 @@ const LoginSchema = yobject().shape({
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [loginError, setLoginError] = useState("");
+  const [showError, setShowError] = useState(false);
   const navigation = useNavigate();
-  const { setAuthenticated } = useAuthStore();
+  const setAuthenticated = useAuthStore((state) => state.setAuthenticated);
 
   const togglePasswordVisibility = () => {
     setShowPassword((state) => !state);
   };
 
   const handleSubmit = ({ email, password }: SubmitValues) => {
+    setShowError(true);
+    setLoginError("");
     setShowPassword(false);
     setIsLoading(true);
     localStorage.removeItem(ACCESS_TOKEN);
@@ -50,20 +55,34 @@ const Login = () => {
         navigation(HOME_ROUTE);
       })
       .catch((err) => {
+        const errorMessage = (err as AxiosResponse).data.error as
+          | string
+          | undefined;
+        setLoginError(errorMessage || "Failed to login");
         setIsLoading(false);
-        console.log(err);
         setAuthenticated(false);
       });
   };
+
+  useEffect(() => {
+    const id = setTimeout(() => {
+      setLoginError("");
+      setShowError(false);
+    }, 5000);
+    return () => clearTimeout(id);
+  }, [showError]);
 
   return (
     <div className="min-h-screen py-6 flex flex-col justify-center sm:py-12">
       <div className="relative py-3 w-[min(700px,97vw)] sm:mx-auto">
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-sky-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
         <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
-          <div className="max-w-md mx-auto">
+          <div className="max-w-md mx-auto relative">
             <div>
               <h1 className="text-2xl font-semibold">Login</h1>
+            </div>
+            <div className="font-bold absolute top-1 left-[50%] translate-x-[-50%] text-red-800">
+              <p>{loginError}</p>
             </div>
             <Formik
               initialValues={{ email: "", password: "" }}

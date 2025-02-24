@@ -4,6 +4,7 @@ import { api } from "../../api/interceptor";
 import GenericSearchInput from "../../components/common/GenericSearchInput";
 import { AcceptedFriendRequestsResponse } from "../../types/social";
 import FriendCard from "../../components/socialize/FriendCard";
+import SimpleSkeleton from "../../animation/SimpleSkeleton";
 
 const AcceptedFriends = () => {
   const [friends, setFriends] = useState<AcceptedFriendRequestsResponse>([]);
@@ -23,15 +24,19 @@ const AcceptedFriends = () => {
   return (
     <div className="w-[min(800px,97vw)] m-auto p-[3vmin] flex flex-col justify-center">
       <GenericSearchInput onSearch={() => {}} />
-      <div className="w-full flex flex-col items-center mt-5">
-        {friends.map((friend) => (
-          <FriendCard
-            key={friend.userId}
-            {...friend}
-            id={friend.userId}
-            isAccepted={true}
-          />
-        ))}
+      <div className="w-full flex flex-col items-center mt-5 gap-2">
+        {friends.length > 0 ? (
+          friends.map((friend) => (
+            <FriendCard
+              key={friend.userId}
+              {...friend}
+              id={friend.userId}
+              isAccepted={true}
+            />
+          ))
+        ) : (
+          <SimpleSkeleton height="82px" count={5} />
+        )}
       </div>
     </div>
   );

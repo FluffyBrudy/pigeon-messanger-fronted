@@ -50,6 +50,10 @@ const ConnectedFriends = () => {
     setActiveChatId(connectedFriends[0].userId);
   }, [setActiveChatId, connectedFriends]);
 
+  const handleClick = (id: string) => {
+    setActiveChatId(id);
+  };
+
   return (
     <div>
       {connectedFriends.map((friend) => (
@@ -58,7 +62,7 @@ const ConnectedFriends = () => {
           key={friend.userId}
           {...friend}
           text={messages[friend.userId]}
-          handleClick={() => setActiveChatId(friend.userId)}
+          handleClick={() => handleClick(friend.userId)}
         />
       ))}
     </div>

@@ -10,6 +10,7 @@ import {
 import MessageBubble from "./MessageBubble";
 import { SocketSingleton } from "../../socket/socket";
 import { SERVER_EVENTS } from "../../socket/constants";
+import SkeletonChatBubble from "../../animation/SkeletonChatBubble";
 
 const ChatInterface = () => {
   const { activeChatId, chatMessages } = useConnectedFriendStore();
@@ -19,6 +20,7 @@ const ChatInterface = () => {
   const setLatestMessage = useConnectedFriendStore(
     (state) => state.setLatestMessage
   );
+  const [messagesLoading, setMessagesLoading] = useState(true);
   const [msgInput, setMsgInput] = useState("");
   const [disableLoadMore, setDisableLoadMore] = useState(false);
   const msgEndRef = useRef<HTMLDivElement | null>(null);
@@ -28,19 +30,24 @@ const ChatInterface = () => {
   useEffect(() => {
     if (!activeChatId) return;
     const fetchMsgs = async () => {
+      setMessagesLoading(true);
       api
         .post(CHAT_MESSAGE_FETCH_POST, {
           recipientId: activeChatId,
         })
         .then((res) => {
           if (res.status === 200) {
+            setMessagesLoading(false);
             const data = res.data.data as FetchChatResponse;
 
             setChatMessages(data.chats.reverse());
             cursorId.current = data.cursor;
           }
         })
-        .catch((err) => console.error((err as Error).message));
+        .catch((err) => {
+          setMessagesLoading(false);
+          console.error((err as Error).message);
+        });
     };
     fetchMsgs();
   }, [activeChatId, setChatMessages]);
@@ -95,7 +102,12 @@ const ChatInterface = () => {
     }
   };
 
-  if (!activeChatId) return null;
+  if (!activeChatId || messagesLoading)
+    return (
+      <div className="flex-1 overflow-auto w-full mx-auto lg:w-[60%] sm:w-full">
+        <SkeletonChatBubble count={10} />
+      </div>
+    );
 
   return (
     <div className="flex flex-col h-full">
