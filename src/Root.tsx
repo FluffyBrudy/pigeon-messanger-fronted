@@ -15,8 +15,8 @@ const Root = () => {
 
   return (
     <div className="h-screen flex flex-col box-border">
-      <div className="w-full bg-gray-800">
-        <div className="m-auto relative w-[min(1000px,100vw)] flex justify-center items-center">
+      <div className="w-full bg-gray-900">
+        <div className="m-auto relative w-[100vw] flex justify-center items-center">
           <Navbar />
           <GlobalNotification />
         </div>

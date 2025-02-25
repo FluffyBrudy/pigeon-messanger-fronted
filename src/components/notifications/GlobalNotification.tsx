@@ -25,14 +25,13 @@ export const GlobalNotification = () => {
   return (
     <div className="cursor-pointer z-[50]" onClick={toggleNotification}>
       <div className="hover:text-white">
-        <div className="relative w-fit ">
-          <span className="absolute right-[-10px] top-[-5px] bg-black z-[51] h-[20px] w-[20px] text-sm text-center rounded-full">
+        <div className="relative">
+          <Bell className="relative mx-auto"></Bell>
+          <span className="absolute translate-x-[200%] -top-1 bg-black z-[51] h-[20px] w-[20px] text-sm text-center rounded-full">
             {count}
           </span>
-
-          <Bell className="relative"></Bell>
         </div>
-        Notifications
+        <p>Notification</p>
       </div>
       <div className="relative">
         <div className="absolute right-2 top-2 w-[min(300px,100vw)] box-border">
