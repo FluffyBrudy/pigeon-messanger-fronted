@@ -113,7 +113,10 @@ const ChatInterface = () => {
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-auto w-full mx-auto lg:w-[60%] sm:w-full">
         {chatMessages.length > 0 && !disableLoadMore && (
-          <button onClick={handleLoadMore} className="opacity-50 block mx-auto">
+          <button
+            onClick={handleLoadMore}
+            className="opacity-50 block mx-auto mb-10"
+          >
             load more...
           </button>
         )}

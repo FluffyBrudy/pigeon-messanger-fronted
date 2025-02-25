@@ -2,7 +2,7 @@ import { useState } from "react";
 import ChatBubbleSidebar from "../../components/chat/ChatBubbleSidebar";
 import ChatInterface from "../../components/chat/ChatInterface";
 import { AddFriendViewer } from "../../components/common/AddFriendViewer";
-import { MenuIcon } from "lucide-react";
+import { Users } from "lucide-react";
 
 const Home = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -10,10 +10,10 @@ const Home = () => {
   return (
     <div className="h-full flex gap-1 relative">
       <button
-        className="md:hidden absolute top-4 left-4 bg-blue-500 text-white px-4 py-2 rounded"
+        className="md:hidden absolute top-0 left-0 text-white px-4 py-2 rounded hover:text-lime-500"
         onClick={() => setSidebarOpen(!sidebarOpen)}
       >
-        {!sidebarOpen && <MenuIcon />}
+        {!sidebarOpen && <Users className="scale-150" />}
       </button>
 
       {sidebarOpen && (
