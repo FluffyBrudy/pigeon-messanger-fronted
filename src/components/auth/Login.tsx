@@ -4,7 +4,7 @@ import { object as yobject, string as ystring } from "yup";
 import { HOME_ROUTE, REGISTER_ROUTE } from "../../router/routerPath";
 import { api } from "../../api/interceptor";
 import { AUTH_LOGIN_POST } from "../../api/endpoints";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FieldWrapper } from "../form/FieldWrapper";
 import { ACCESS_TOKEN } from "../../api/constants";
 import { useAuthStore } from "../../store/authStore";
@@ -28,7 +28,6 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState("");
-  const [showError, setShowError] = useState(false);
   const navigation = useNavigate();
   const setAuthenticated = useAuthStore((state) => state.setAuthenticated);
 
@@ -37,7 +36,6 @@ const Login = () => {
   };
 
   const handleSubmit = ({ email, password }: SubmitValues) => {
-    setShowError(true);
     setLoginError("");
     setShowPassword(false);
     setIsLoading(true);
@@ -63,14 +61,6 @@ const Login = () => {
         setAuthenticated(false);
       });
   };
-
-  useEffect(() => {
-    const id = setTimeout(() => {
-      setLoginError("");
-      setShowError(false);
-    }, 5000);
-    return () => clearTimeout(id);
-  }, [showError]);
 
   return (
     <div className="min-h-screen py-6 flex flex-col justify-center sm:py-12">
