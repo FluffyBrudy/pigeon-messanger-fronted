@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { api } from "../../api/interceptor";
 import { SOCIAL_FRIENDS_SEARCH_POST } from "../../api/endpoints";
 import { useSearchFriendStore } from "../../store/friendSearchStore";
@@ -7,6 +7,7 @@ import { UserPlus } from "lucide-react";
 import { UNKNOWN } from "./constants";
 
 const FindFriends = () => {
+  const [info, setInfo] = useState("");
   const delay = useRef(300);
   const timeoutRef = useRef<number | null>(null);
   const { setSearchedFriend, setError, setSearchedvisibility } =
@@ -20,6 +21,7 @@ const FindFriends = () => {
     const searchValue = e.target.value.trim();
     if (!searchValue) {
       setSearchedFriend([]);
+      setInfo("");
       return;
     }
     setSearchedvisibility(true);
@@ -31,6 +33,8 @@ const FindFriends = () => {
         });
         const searchedFriendList = res.data as { data: Array<SearchedFriend> };
         if (res.status === 200) {
+          if (searchedFriendList.data.length === 0)
+            setInfo("No friends found...");
           setSearchedFriend(searchedFriendList.data);
         } else {
           setError("Something went wrong");
@@ -47,8 +51,9 @@ const FindFriends = () => {
         <input
           type="text"
           className="flex-1 w-full px-4 py-2 text-purple-700 bg-white border rounded-full shadow focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
-          placeholder="Search for friends..."
+          placeholder="Search for new friends..."
           onChange={handleChange}
+          onBlur={() => setInfo("")}
         />
 
         <UserPlus
@@ -56,6 +61,7 @@ const FindFriends = () => {
           size={20}
         />
       </div>
+      <p className="text-black text-center opacity-70">{info}</p>
     </div>
   );
 };
