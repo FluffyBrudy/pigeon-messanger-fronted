@@ -4,6 +4,7 @@ import { CheckCircle, User } from "lucide-react";
 
 interface FriendCardProps extends Friend {
   children?: React.ReactNode;
+  handleClick?: () => void;
 }
 
 const FriendCard: React.FC<FriendCardProps> = ({
@@ -12,9 +13,15 @@ const FriendCard: React.FC<FriendCardProps> = ({
   imageUrl,
   isAccepted,
   children,
+  handleClick,
 }) => {
+  const clickEvent = handleClick ? { onClick: handleClick } : null;
+
   return (
-    <div className="w-[90%] flex items-center justify-center flex-wrap gap-4 bg-white shadow-md rounded-lg p-4 transition hover:shadow-lg">
+    <div
+      {...clickEvent}
+      className="cursor-pointer w-[90%] flex items-center justify-center flex-wrap gap-4 bg-white shadow-md rounded-lg p-4 transition hover:shadow-lg"
+    >
       <img
         src={imageUrl}
         alt={username}

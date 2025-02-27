@@ -1,18 +1,14 @@
 import { useEffect } from "react";
 import { useAuthStore } from "../../store/authStore";
-import { useNotificationStore } from "../../store/notificationStore";
 import { useConnectedFriendStore } from "../../store/connectedFriendsStore";
 import { SocketSingleton } from "../../socket/socket";
 import { CLIENT_EVENTS, SERVER_EVENTS } from "../../socket/constants";
-import { PENDING_REQUESTS_ROUTE } from "../../router/routerPath";
 import { MessageTypeRecieverData } from "../../types/socketData";
 
 const useSocketHandlers = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const activeChatId = useConnectedFriendStore((state) => state.activeChatId);
-  const setNotification = useNotificationStore(
-    (state) => state.setNotification
-  );
+
   const setChatMessages = useConnectedFriendStore(
     (state) => state.setChatMessages
   );
@@ -32,10 +28,7 @@ const useSocketHandlers = () => {
 
     const handleNotification = (data: { eventName: string }) => {
       if (data.eventName === SERVER_EVENTS.CONNECT_FRIEND) {
-        setNotification({
-          message: "Someone sent you a friend request",
-          redirectTo: PENDING_REQUESTS_ROUTE,
-        });
+        // later
       }
     };
 
@@ -70,13 +63,7 @@ const useSocketHandlers = () => {
       );
       socketInstance.off(CLIENT_EVENTS.ERRORS, handleError);
     };
-  }, [
-    isAuthenticated,
-    setNotification,
-    setChatMessages,
-    setLatestMsg,
-    activeChatId,
-  ]);
+  }, [isAuthenticated, setChatMessages, setLatestMsg, activeChatId]);
 };
 
 export default useSocketHandlers;

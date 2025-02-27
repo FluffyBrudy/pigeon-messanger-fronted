@@ -1,9 +1,10 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./components/common/Navbar";
 import { useAuthStore } from "./store/authStore";
-import { GlobalNotification } from "./components/notifications/GlobalNotification";
 import useAuthReauthorize from "./hooks/auth/useReauthorize";
 import useSocketHandlers from "./hooks/auth/useSocketHandler";
+import ChatBubbleSidebar from "./components/chat/ChatBubbleSidebar";
+import { AddFriendViewer } from "./components/socialize/AddFriendViewer";
 
 const Root = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -14,14 +15,20 @@ const Root = () => {
   if (!isAuthenticated) return null;
 
   return (
-    <div className="h-screen flex flex-col box-border">
-      <div className="w-full bg-gray-900">
-        <div className="m-auto relative w-[100vw] flex justify-center items-center">
-          <Navbar />
-          <GlobalNotification />
-        </div>
+    <div className="flex">
+      <div>
+        <Navbar />
       </div>
-      <div className="flex-1 overflow-hidden">
+
+      <div>
+        <ChatBubbleSidebar />
+      </div>
+
+      <div>
+        <AddFriendViewer />
+      </div>
+
+      <div className="flex-1">
         <Outlet />
       </div>
     </div>

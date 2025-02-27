@@ -66,8 +66,8 @@ const PendingRequests = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-6">
-      <div className="flex mb-4 space-x-4">
+    <div className="p-6 flex flex-col items-center h-screen">
+      <div className="mb-4 space-x-4">
         <button
           onClick={() => setActiveTab(PendingRequestType.sent)}
           className={`py-2 px-4 rounded-md text-sm font-medium ${
