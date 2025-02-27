@@ -1,6 +1,5 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { SearchedFriend } from "./social";
-import { Notification } from "./notifications";
 import { ConnectedFriend } from "./user";
 import { FetchChatMessageResponse } from "./chat";
 
@@ -49,15 +48,4 @@ export interface IConnectedFriendsStore {
     order?: "a" | "p"
   ) => void;
   setLatestMessage: (id: string, message: string) => void;
-}
-
-export interface INotifcationStore {
-  isVisible: boolean;
-  nextId: number;
-  notifications: Array<Notification>;
-  toAlert: boolean;
-  count: number;
-  setNotification: (notificationData: Omit<Notification, "id">) => void;
-  removeNotification: (nid: Notification["id"]) => void;
-  toggleNotification: () => void;
 }
