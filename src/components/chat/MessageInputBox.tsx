@@ -39,7 +39,7 @@ const MessageInputBox: FC<MessageInputBoxProps> = ({
   };
 
   return (
-    <div className="flex items-center bg-white p-3 rounded-full w-[min(800px,100%)] mx-auto border border-gray-200 shadow-sm">
+    <div className="flex items-center bg-white p-3 rounded-full  mx-auto border border-gray-200 shadow-sm">
       <input
         type="text"
         value={message}
