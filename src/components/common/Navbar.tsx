@@ -74,7 +74,7 @@ const AppIcon = () => {
 
   return (
     <div
-      className="relative cursor-pointer w-[50%] flex justify-center rounded-full"
+      className="relative cursor-pointer w-[8vmin] h-auto sm:w-[5vmin] flex justify-center rounded-full"
       onClick={() => navigation(HOME_ROUTE)}
     >
       <img src="/appicon.svg" />
