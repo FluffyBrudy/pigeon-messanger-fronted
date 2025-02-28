@@ -22,24 +22,35 @@ const Root = () => {
       <Navbar
         orient="h"
         className="lg:hidden"
-        smMenuCallback={() => setForceShowMenu((state) => !state)}
+        smMenuCallback={() => setForceShowMenu((prev) => !prev)}
       />
 
-      <div className="flex flex-1">
+      <div className="flex flex-1 relative">
         <div
-          className={`transition-all duration-300 ${
-            forceShowMenu ? "opacity-100 max-w-xs" : "opacity-0 max-w-0"
-          } lg:block`}
+          className={`lg:flex lg:relative absolute top-0 right-0 h-full bg-white shadow-lg transition-transform duration-300 z-40 
+            ${
+              forceShowMenu ? "translate-x-0" : "translate-x-full"
+            } lg:translate-x-0`}
+          style={{ width: "400px" }}
         >
           <ChatBubbleSidebar />
         </div>
 
-        <div>
-          <AddFriendViewer />
-        </div>
+        {forceShowMenu && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+            onClick={() => setForceShowMenu(false)}
+          />
+        )}
 
-        <div className="flex-1 h-full overflow-auto">
-          <Outlet />
+        <div className="flex-1 h-full flex overflow-auto">
+          <div className="hidden lg:flex p-2">
+            <AddFriendViewer />
+          </div>
+
+          <div className="flex-1 h-full overflow-auto transition-opacity duration-300">
+            <Outlet />
+          </div>
         </div>
       </div>
     </div>

@@ -31,7 +31,7 @@ const ChatBubbleSidebar = () => {
   );
   return (
     <div
-      className="flex flex-col gap-3 h-screen overflow-y-scroll w-[300px] max-w-[300px] 
+      className="flex flex-col gap-3 h-screen overflow-y-scroll w-full 
   bg-[#16273d]  border-[0px] py-0 shadow-inner shadow-white/40"
     >
       <div className="sticky top-0 bg-gray-300 py-2 px-2 border-b border-gray-300">
