@@ -17,7 +17,9 @@ const MessageBubble: FC<MessageBubbleProps> = ({ isUser, message }) => {
           }
         `}
       >
-        <p className="text-md font-poppins leading-snug">{message}</p>
+        <p className="text-md font-poppins leading-snug break-words">
+          {message}
+        </p>
       </div>
     </div>
   );
