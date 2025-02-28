@@ -31,7 +31,7 @@ const Root = () => {
             ${
               forceShowMenu ? "translate-x-0" : "translate-x-full"
             } lg:translate-x-0`}
-          style={{ width: "400px" }}
+          style={{ width: "min(400px,97vw)" }}
         >
           <ChatBubbleSidebar />
         </div>
