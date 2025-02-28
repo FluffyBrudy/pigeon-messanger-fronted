@@ -6,6 +6,7 @@ import useSocketHandlers from "./hooks/auth/useSocketHandler";
 import ChatBubbleSidebar from "./components/chat/ChatBubbleSidebar";
 import { AddFriendViewer } from "./components/socialize/AddFriendViewer";
 import { useState } from "react";
+import LoadingScreen from "./animation/LoadingScreen";
 
 const Root = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -14,7 +15,7 @@ const Root = () => {
   useAuthReauthorize();
   useSocketHandlers();
 
-  if (!isAuthenticated) return null;
+  if (!isAuthenticated) return <LoadingScreen />;
 
   return (
     <div className="flex flex-col lg:flex-row max-w-[100vw] h-screen overflow-hidden">
