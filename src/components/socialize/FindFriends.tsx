@@ -3,11 +3,12 @@ import { api } from "../../api/interceptor";
 import { SOCIAL_FRIENDS_SEARCH_POST } from "../../api/endpoints";
 import { useSearchFriendStore } from "../../store/friendSearchStore";
 import { SearchedFriend } from "../../types/social";
-import { UserPlus } from "lucide-react";
+import { UserPlus, Loader2 } from "lucide-react";
 import { UNKNOWN } from "./constants";
 
 const FindFriends = () => {
   const [info, setInfo] = useState("");
+  const [loading, setLoading] = useState(false);
   const delay = useRef(300);
   const timeoutRef = useRef<number | null>(null);
   const { setSearchedFriend, setError, setSearchedvisibility } =
@@ -22,9 +23,13 @@ const FindFriends = () => {
     if (!searchValue) {
       setSearchedFriend([]);
       setInfo("");
+      setLoading(false);
       return;
     }
+
     setSearchedvisibility(true);
+    setLoading(true);
+
     timeoutRef.current = setTimeout(async () => {
       try {
         const res = await api.post(SOCIAL_FRIENDS_SEARCH_POST, {
@@ -32,14 +37,19 @@ const FindFriends = () => {
           UNKNOWN,
         });
         const searchedFriendList = res.data as { data: Array<SearchedFriend> };
+
         if (res.status === 200) {
-          if (searchedFriendList.data.length === 0)
+          setLoading(false);
+          if (searchedFriendList.data.length === 0) {
             setInfo("No friends found...");
+          }
           setSearchedFriend(searchedFriendList.data);
         } else {
+          setLoading(false);
           setError("Something went wrong");
         }
       } catch (err) {
+        setLoading(false);
         setError((err as Error).message);
       }
     }, delay.current);
@@ -56,10 +66,17 @@ const FindFriends = () => {
           onBlur={() => setInfo("")}
         />
 
-        <UserPlus
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-purple-500"
-          size={20}
-        />
+        {loading ? (
+          <Loader2
+            className="absolute right-4 top-[30%] text-purple-500 animate-spin "
+            size={20}
+          />
+        ) : (
+          <UserPlus
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-purple-500"
+            size={20}
+          />
+        )}
       </div>
       <p className="text-black text-center opacity-70">{info}</p>
     </div>

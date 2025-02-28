@@ -111,7 +111,7 @@ const ChatInterface = () => {
 
   return (
     <div className="flex flex-col items-center h-full">
-      <div className="flex-[0.85] lg:flex-1 overflow-auto mx-auto lg:w-[60%] sm:w-full">
+      <div className="w-[90%] sm:w-[90%] md:w-[90%] lg:w-[60%]">
         {chatMessages.length > 0 && !disableLoadMore && (
           <button
             onClick={handleLoadMore}
