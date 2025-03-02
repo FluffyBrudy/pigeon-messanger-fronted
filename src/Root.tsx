@@ -5,7 +5,7 @@ import useAuthReauthorize from "./hooks/auth/useReauthorize";
 import useSocketHandlers from "./hooks/auth/useSocketHandler";
 import ChatBubbleSidebar from "./components/chat/ChatBubbleSidebar";
 import { AddFriendViewer } from "./components/socialize/AddFriendViewer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoadingScreen from "./animation/LoadingScreen";
 
 const Root = () => {
@@ -14,6 +14,8 @@ const Root = () => {
 
   useAuthReauthorize();
   useSocketHandlers();
+
+  useEffect(() => {}, []);
 
   if (!isAuthenticated) return <LoadingScreen />;
 

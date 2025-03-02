@@ -107,16 +107,15 @@ const ChatInterface = () => {
         <SkeletonChatBubble count={10} />
       </div>
     );
-
   return (
-    <div className="flex flex-col items-center overflow-auto">
-      <div className="w-[90%] sm:w-[90%] md:w-[90%] lg:w-[60%]">
+    <div className="flex flex-col h-screen w-full items-center">
+      <div className="flex flex-col flex-grow overflow-auto w-[90%] sm:w-[90%] md:w-[90%] lg:w-[60%]">
         {chatMessages.length > 0 && !disableLoadMore && (
           <button
             onClick={handleLoadMore}
-            className="opacity-50 block mx-auto mb-10"
+            className="opacity-50 block mx-auto mb-2"
           >
-            load more...
+            Load more...
           </button>
         )}
         <div ref={msgEndRef}>
@@ -129,14 +128,13 @@ const ChatInterface = () => {
           ))}
         </div>
       </div>
-      <div className="h-[80px] max-h-[80px] w-full lg:w-[60%] sm:w-full mx-auto fixed -bottom-[15px]">
-        {activeChatId && (
-          <MessengeInputBox
-            setMessage={setMsgInput}
-            message={msgInput}
-            handleSubmit={handleSend}
-          />
-        )}
+
+      <div className="w-full lg:w-[60%] sm:w-full p-2">
+        <MessengeInputBox
+          setMessage={setMsgInput}
+          message={msgInput}
+          handleSubmit={handleSend}
+        />
       </div>
     </div>
   );
