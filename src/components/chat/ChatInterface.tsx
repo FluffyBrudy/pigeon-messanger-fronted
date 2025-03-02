@@ -109,7 +109,7 @@ const ChatInterface = () => {
     );
 
   return (
-    <div className="flex flex-col items-center h-[90vh] overflow-auto">
+    <div className="flex flex-col items-center overflow-auto">
       <div className="w-[90%] sm:w-[90%] md:w-[90%] lg:w-[60%]">
         {chatMessages.length > 0 && !disableLoadMore && (
           <button
