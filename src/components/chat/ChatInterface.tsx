@@ -53,9 +53,8 @@ const ChatInterface = () => {
   }, [activeChatId, setChatMessages]);
 
   useEffect(() => {
-    const chatContainer = msgEndRef.current?.parentElement;
-    if (chatContainer) {
-      chatContainer.scrollTop = chatContainer.scrollHeight;
+    if (msgEndRef.current) {
+      msgEndRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
   }, [chatMessages]);
 
@@ -110,7 +109,7 @@ const ChatInterface = () => {
     );
 
   return (
-    <div className="flex flex-col items-center h-[90vh] lg:h-[100vh] overflow-auto">
+    <div className="flex flex-col items-center h-[90vh] overflow-auto">
       <div className="w-[90%] sm:w-[90%] md:w-[90%] lg:w-[60%]">
         {chatMessages.length > 0 && !disableLoadMore && (
           <button
@@ -130,7 +129,7 @@ const ChatInterface = () => {
           ))}
         </div>
       </div>
-      <div className="h-[80px] max-h-[80px] w-full lg:w-[60%] sm:w-full mx-auto sticky bottom-0">
+      <div className="h-[80px] max-h-[80px] w-full lg:w-[60%] sm:w-full mx-auto fixed bottom-0 lg:-bottom-[15px]">
         {activeChatId && (
           <MessengeInputBox
             setMessage={setMsgInput}
