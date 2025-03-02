@@ -129,7 +129,7 @@ const ChatInterface = () => {
           ))}
         </div>
       </div>
-      <div className="h-[80px] max-h-[80px] w-full lg:w-[60%] sm:w-full mx-auto fixed bottom-0 lg:-bottom-[15px]">
+      <div className="h-[80px] max-h-[80px] w-full lg:w-[60%] sm:w-full mx-auto fixed -bottom-[15px]">
         {activeChatId && (
           <MessengeInputBox
             setMessage={setMsgInput}
