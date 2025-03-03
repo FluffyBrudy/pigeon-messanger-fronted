@@ -108,8 +108,8 @@ const ChatInterface = () => {
       </div>
     );
   return (
-    <div className="flex flex-col h-screen w-full items-center">
-      <div className="flex flex-col flex-grow overflow-auto w-[90%] sm:w-[90%] md:w-[90%] lg:w-[60%]">
+    <div className="flex flex-col h-screen w-full items-center box-border overflow-hidden">
+      <div className="flex flex-[0.9] lg:flex-1 flex-col overflow-auto w-[90%] lg:w-[60%]">
         {chatMessages.length > 0 && !disableLoadMore && (
           <button
             onClick={handleLoadMore}
@@ -129,7 +129,7 @@ const ChatInterface = () => {
         </div>
       </div>
 
-      <div className="w-full lg:w-[60%] sm:w-full p-2">
+      <div className="w-full lg:w-[60%] sm:w-full p-2 flex-shrink-0">
         <MessengeInputBox
           setMessage={setMsgInput}
           message={msgInput}
