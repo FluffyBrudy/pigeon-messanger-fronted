@@ -10,11 +10,13 @@ import {
   ROOT,
   ACCEPTED_FRIENDS_ROUTE,
   PENDING_REQUESTS_ROUTE,
+  PREF_PROFILE_SETUP,
 } from "./routerPath";
 import Home from "../pages/home/Home";
 import Auth from "../pages/authentication/Auth";
 import AcceptedFriends from "../pages/social/AcceptedFriends";
 import PendingRequests from "../pages/social/PendingRequests";
+import ProfileSetup from "../pages/preference/ProfileSetup";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: PENDING_REQUESTS_ROUTE,
         element: <PendingRequests />,
+      },
+      {
+        path: PREF_PROFILE_SETUP,
+        element: <ProfileSetup />,
       },
     ],
   },
