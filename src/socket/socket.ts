@@ -10,6 +10,7 @@ export class SocketSingleton {
   static getInstance() {
     if (!SocketSingleton.instance) {
       SocketSingleton.instance = io(import.meta.env.VITE_SOCKET_API, {
+        transports: ["websocket", "polling"],
         auth: {
           token: localStorage.getItem(ACCESS_TOKEN),
         },
