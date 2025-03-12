@@ -18,7 +18,7 @@ const useAuthReauthorize = () => {
 
   useEffect(() => {
     const reAuthorize = async () => {
-      if (!localStorage.getItem(ACCESS_TOKEN)) return;
+      if (!localStorage.getItem(ACCESS_TOKEN)) return navigate(LOGIN_ROUTE);
       const res = await attemptAuthorization();
       if (res && res.status === 200) {
         SocketSingleton.connectSocket();
