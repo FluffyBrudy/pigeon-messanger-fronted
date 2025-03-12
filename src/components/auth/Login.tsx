@@ -44,7 +44,7 @@ const Login = () => {
       .post(AUTH_LOGIN_POST, { email, password })
       .then((res) => {
         setIsLoading(false);
-        console.log(res.status);
+        console.log(res.data);
         if (res.status === 200) {
           setAuthenticated(true);
           localStorage.setItem(ACCESS_TOKEN, res.data?.data[ACCESS_TOKEN]);
