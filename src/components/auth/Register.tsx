@@ -32,18 +32,20 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigate();
 
-  const handleSubmit = ({ username, email, password }: SubmitValues) => {
-    setIsLoading(true);
-    api
-      .post(AUTH_REGISTER_POST, { username, email, password })
-      .then(() => {
-        setIsLoading(false);
-        navigation(LOGIN_ROUTE);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        console.log(err);
+  const handleSubmit = async ({ username, email, password }: SubmitValues) => {
+    try {
+      setIsLoading(true);
+      await api.post(AUTH_REGISTER_POST, {
+        username,
+        email,
+        password,
       });
+      setIsLoading(false);
+      navigation(LOGIN_ROUTE);
+    } catch (err) {
+      setIsLoading(false);
+      console.log(err);
+    }
   };
 
   const initValues = {

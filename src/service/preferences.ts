@@ -10,6 +10,7 @@ async function generatePrefProfileSignature(): SignatureResult {
   try {
     const response = await api.get(PREF_PROFILE_SIGNATURE_GET);
     const data = response.data as Record<"data", SignatureResponseData>;
+
     return [data.data, null];
   } catch (error) {
     console.log(error);
@@ -24,10 +25,11 @@ export const uploadImageFromBlobUrl = async (staticHtmlString: string) => {
   const file = new File([blob], "Avatar.svg", { type: blob.type });
 
   const [data, error] = await generatePrefProfileSignature();
+
   if (error) return error;
-
+  console.log(data);
   const { signature, timestamp } = data!;
-
+  console.log(signature, signature);
   const formData = new FormData();
   formData.append("file", file);
   formData.append("api_key", import.meta.env.VITE_CLOUD_API_KEY);
@@ -44,9 +46,11 @@ export const uploadImageFromBlobUrl = async (staticHtmlString: string) => {
   try {
     const resImg = await axios.post(import.meta.env.VITE_CLOUD_URL, formData);
     console.log(resImg.data.secure_url);
+    return resImg.data.secure_url;
   } catch (error) {
     const err = error as AxiosError;
     console.error(err.message);
     console.error(err.config?.data);
+    return null;
   }
 };

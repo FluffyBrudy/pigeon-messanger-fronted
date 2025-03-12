@@ -3,12 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { object as yobject, string as ystring } from "yup";
 import { HOME_ROUTE, REGISTER_ROUTE } from "../../router/routerPath";
 import { api } from "../../api/interceptor";
-import { AUTH_LOGIN_POST } from "../../api/endpoints";
+import { AUTH_LOGIN_POST, PREF_PROFILE_IMAGE_POST } from "../../api/endpoints";
 import { useState } from "react";
 import { FieldWrapper } from "../form/FieldWrapper";
 import { ACCESS_TOKEN } from "../../api/constants";
 import { useAuthStore } from "../../store/authStore";
 import { EyeClosed, EyeIcon } from "lucide-react";
+import { LoginData } from "../../types/user";
+import { renderToStaticMarkup } from "react-dom/server";
+import { uploadImageFromBlobUrl } from "../../service/preferences";
+import Avatar from "../common/Avatar";
 import { AxiosResponse } from "axios";
 
 interface SubmitValues {
@@ -30,36 +34,63 @@ const Login = () => {
   const [loginError, setLoginError] = useState("");
   const navigation = useNavigate();
   const setAuthenticated = useAuthStore((state) => state.setAuthenticated);
+  const setUserData = useAuthStore((state) => state.setUserData);
 
   const togglePasswordVisibility = () => {
     setShowPassword((state) => !state);
   };
 
-  const handleSubmit = ({ email, password }: SubmitValues) => {
+  const handleSubmit = async ({ email, password }: SubmitValues) => {
     setLoginError("");
     setShowPassword(false);
     setIsLoading(true);
     localStorage.removeItem(ACCESS_TOKEN);
-    api
-      .post(AUTH_LOGIN_POST, { email, password })
-      .then((res) => {
-        setIsLoading(false);
-        console.log(res.data);
-        if (res.status === 200) {
-          setAuthenticated(true);
-          localStorage.setItem(ACCESS_TOKEN, res.data?.data[ACCESS_TOKEN]);
-          localStorage.setItem("id", res.data?.data["id"]);
-        }
+    let needUpdate = false;
+    let username_ = "";
+
+    try {
+      const res = await api.post(AUTH_LOGIN_POST, { email, password });
+      const { username, initialized, id, accessToken } = res.data
+        .data as LoginData;
+      console.log(initialized);
+      const userData = {
+        username,
+        isProfileInitialized: initialized,
+        userId: id,
+      };
+
+      setIsLoading(false);
+
+      if (res.status === 200) {
+        needUpdate = !initialized;
+        username_ = username;
+        setAuthenticated(true);
+        setUserData(userData);
+        localStorage.setItem(ACCESS_TOKEN, accessToken);
+        localStorage.setItem("id", id);
         navigation(HOME_ROUTE);
-      })
-      .catch((err) => {
-        const errorMessage = (err as AxiosResponse).data.error as
-          | string
-          | undefined;
-        setLoginError(errorMessage || "Failed to login");
-        setIsLoading(false);
-        setAuthenticated(false);
-      });
+      }
+    } catch (err) {
+      console.error(err);
+      const errorMessage =
+        (err as Error).message || (err as AxiosResponse).data.error;
+      setLoginError(errorMessage || "Failed to login");
+      setIsLoading(false);
+      setAuthenticated(false);
+    }
+    if (needUpdate) {
+      const staticHtmlString = renderToStaticMarkup(
+        <Avatar name={username_} />
+      );
+      try {
+        const imageUrl = await uploadImageFromBlobUrl(staticHtmlString);
+        console.log(imageUrl, "***");
+        const uploadRes = await api.post(PREF_PROFILE_IMAGE_POST, { imageUrl });
+        console.log(uploadRes);
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
 
   return (

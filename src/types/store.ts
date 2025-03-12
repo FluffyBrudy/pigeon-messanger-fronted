@@ -3,9 +3,14 @@ import { SearchedFriend } from "./social";
 import { ConnectedFriend } from "./user";
 import { FetchChatMessageResponse } from "./chat";
 
-export interface IAuthStore {
+export interface IAuthStoreValues {
   userId: string | null;
   isAuthenticated: boolean;
+  username: string;
+  isProfileInitialized: boolean;
+}
+export interface IAuthStore extends IAuthStoreValues {
+  setUserData: (data: Omit<IAuthStoreValues, "isAuthenticated">) => void;
   setAuthenticated: (isAuthenticated: boolean) => void;
   attemptAuthorization: () => Promise<AxiosResponse | AxiosError | null>;
 }

@@ -28,7 +28,10 @@ const ChatInterface = () => {
   const cursorId = useRef<string | undefined>(undefined);
 
   useEffect(() => {
-    if (!activeChatId) return;
+    if (!activeChatId) {
+      setMessagesLoading(false);
+      return;
+    }
     const fetchMsgs = async () => {
       setMessagesLoading(true);
       api
@@ -101,7 +104,7 @@ const ChatInterface = () => {
     }
   };
 
-  if (!activeChatId || messagesLoading)
+  if (messagesLoading)
     return (
       <div className="flex-1 overflow-auto w-full mx-auto lg:w-[60%] sm:w-full">
         <SkeletonChatBubble count={10} />
@@ -129,13 +132,21 @@ const ChatInterface = () => {
         </div>
       </div>
 
-      <div className="w-full lg:w-[60%] sm:w-full p-2 flex-shrink-0">
-        <MessengeInputBox
-          setMessage={setMsgInput}
-          message={msgInput}
-          handleSubmit={handleSend}
-        />
-      </div>
+      {chatMessages.length > 0 ? (
+        <div className="w-full lg:w-[60%] sm:w-full p-2 flex-shrink-0">
+          <MessengeInputBox
+            setMessage={setMsgInput}
+            message={msgInput}
+            handleSubmit={handleSend}
+          />
+        </div>
+      ) : (
+        <div className="flex-1">
+          <p className="text-lg font-bold">
+            Pigeon is so sad, tell pigeon to search for friends
+          </p>
+        </div>
+      )}
     </div>
   );
 };

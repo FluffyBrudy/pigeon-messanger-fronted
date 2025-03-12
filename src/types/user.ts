@@ -3,3 +3,10 @@ export type ConnectedFriend = {
   imageUrl: string;
   userId: string;
 };
+
+export type LoginData = {
+  accessToken: string;
+  id: string;
+  username: string;
+  initialized: boolean;
+};

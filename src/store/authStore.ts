@@ -1,17 +1,23 @@
 import { AxiosError } from "axios";
 import { api } from "../api/interceptor";
 import { SILENT_LOGIN_POST } from "../api/endpoints";
-import { IAuthStore } from "../types/store";
+import { IAuthStore, IAuthStoreValues } from "../types/store";
 import { create } from "zustand";
 import { ACCESS_TOKEN } from "../api/constants";
 
-const defaultValue = {
+const defaultValue: IAuthStoreValues = {
   userId: null,
   isAuthenticated: false,
+  username: "",
+  isProfileInitialized: false,
 };
 
 export const useAuthStore = create<IAuthStore>((set) => ({
   ...defaultValue,
+
+  setUserData(data) {
+    set({ ...data });
+  },
 
   setAuthenticated(isAuthenticated: boolean) {
     set({ isAuthenticated });
