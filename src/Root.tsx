@@ -47,14 +47,13 @@ const Root = () => {
         )}
 
         <div className="flex-1 h-full flex overflow-auto">
-          <div className="hidden lg:flex p-2">
-            <AddFriendViewer />
-          </div>
-
           <div className="flex-1 h-full overflow-auto transition-opacity duration-300">
             <Outlet />
           </div>
         </div>
+      </div>
+      <div>
+        <AddFriendViewer />
       </div>
     </div>
   );

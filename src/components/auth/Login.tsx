@@ -84,7 +84,6 @@ const Login = () => {
       );
       try {
         const imageUrl = await uploadImageFromBlobUrl(staticHtmlString);
-        console.log(imageUrl, "***");
         const uploadRes = await api.post(PREF_PROFILE_IMAGE_POST, { imageUrl });
         console.log(uploadRes);
       } catch (error) {
