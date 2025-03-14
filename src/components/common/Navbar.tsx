@@ -20,7 +20,7 @@ const Navbar: FC<NavbarProps> = ({
   smMenuCallback,
 }) => {
   const isActive = (path: string) =>
-    location.pathname === path ? "text-blue-500" : "text-gray-400";
+    location.pathname === path ? "text-red-500" : "text-gray-400";
 
   return (
     <nav
