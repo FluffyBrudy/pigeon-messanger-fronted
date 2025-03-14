@@ -39,6 +39,10 @@ const Login = () => {
   const setAuthenticated = useAuthStore((state) => state.setAuthenticated);
   const setUserData = useAuthStore((state) => state.setUserData);
   const userData = useRef<UserData | null>(null);
+  const guestUser = useRef({
+    email: "apple@gmail.com",
+    password: "Applefruit#12",
+  });
 
   const togglePasswordVisibility = () => {
     setShowPassword((state) => !state);
@@ -164,7 +168,15 @@ const Login = () => {
                 </Form>
               )}
             </Formik>
-
+            <button
+              onClick={() => handleSubmit({ ...guestUser.current })}
+              disabled={isLoading}
+              className={`${
+                isLoading ? "bg-cyan-200" : "bg-cyan-500"
+              } text-white font-bold rounded-md px-2 py-1 w-full`}
+            >
+              Join as guest user
+            </button>
             <div className="w-full flex justify-center mt-6">
               <Link
                 to={REGISTER_ROUTE}
