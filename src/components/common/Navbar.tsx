@@ -19,6 +19,9 @@ const Navbar: FC<NavbarProps> = ({
   className = "",
   smMenuCallback,
 }) => {
+  const isActive = (path: string) =>
+    location.pathname === path ? "text-blue-500" : "text-gray-400";
+
   return (
     <nav
       className={`${
@@ -40,8 +43,8 @@ const Navbar: FC<NavbarProps> = ({
             to={HOME_ROUTE}
             className="absolute block top-0 left-0 w-full z-10 h-full"
           />
-          <Home className="w-[5vmin]" />
-          <span>Home</span>
+          <Home className={`w-[5vmin] ${isActive(HOME_ROUTE)}`} />
+          <span className={isActive(HOME_ROUTE)}>Home</span>
         </div>
 
         <div className="flex flex-col items-center gap-1 relative">
@@ -49,8 +52,8 @@ const Navbar: FC<NavbarProps> = ({
             to={ACCEPTED_FRIENDS_ROUTE}
             className="absolute block top-0 left-0 w-full z-10 h-full"
           />
-          <Users className="w-[5vmin]" />
-          <span>Friends</span>
+          <Users className={`w-[5vmin] ${isActive(ACCEPTED_FRIENDS_ROUTE)}`} />
+          <span className={isActive(ACCEPTED_FRIENDS_ROUTE)}>Friends</span>
         </div>
 
         <div className="flex flex-col items-center gap-1 relative">
@@ -58,8 +61,10 @@ const Navbar: FC<NavbarProps> = ({
             to={PENDING_REQUESTS_ROUTE}
             className="absolute block top-0 left-0 w-full z-10 h-full"
           />
-          <UserPlus className="w-[5vmin]" />
-          <span>Requests</span>
+          <UserPlus
+            className={`w-[5vmin] ${isActive(PENDING_REQUESTS_ROUTE)}`}
+          />
+          <span className={isActive(PENDING_REQUESTS_ROUTE)}>Requests</span>
         </div>
       </div>
 
