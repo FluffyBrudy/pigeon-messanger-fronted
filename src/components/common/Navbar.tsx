@@ -1,11 +1,12 @@
 import { FC } from "react";
 import { Menu, Home, Users, UserPlus } from "lucide-react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
   ACCEPTED_FRIENDS_ROUTE,
   HOME_ROUTE,
   PENDING_REQUESTS_ROUTE,
 } from "../../router/routerPath";
+import Profile from "../../pages/preference/Profile";
 
 interface NavbarProps {
   orient?: string;
@@ -26,8 +27,7 @@ const Navbar: FC<NavbarProps> = ({
           : "h-16 w-full flex-row px-4 justify-between"
       } bg-gray-900 text-white flex items-center py-4 ${className}`}
     >
-      <AppIcon />
-
+      <Profile />
       <div
         className={`flex ${
           orient === "v"
@@ -66,19 +66,6 @@ const Navbar: FC<NavbarProps> = ({
         </button>
       )}
     </nav>
-  );
-};
-
-const AppIcon = () => {
-  const navigation = useNavigate();
-
-  return (
-    <div
-      className="relative cursor-pointer w-[8vmin] h-auto sm:w-[5vmin] flex justify-center rounded-full"
-      onClick={() => navigation(HOME_ROUTE)}
-    >
-      <img src="/appicon.svg" />
-    </div>
   );
 };
 

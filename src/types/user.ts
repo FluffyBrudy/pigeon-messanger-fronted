@@ -9,4 +9,5 @@ export type LoginData = {
   id: string;
   username: string;
   initialized: boolean;
+  imageUrl: string;
 };

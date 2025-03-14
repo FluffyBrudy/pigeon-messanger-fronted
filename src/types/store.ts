@@ -4,13 +4,16 @@ import { ConnectedFriend } from "./user";
 import { FetchChatMessageResponse } from "./chat";
 
 export interface IAuthStoreValues {
+  imageUrl: string | null;
   userId: string | null;
   isAuthenticated: boolean;
   username: string;
   isProfileInitialized: boolean;
 }
 export interface IAuthStore extends IAuthStoreValues {
-  setUserData: (data: Omit<IAuthStoreValues, "isAuthenticated">) => void;
+  setUserData: (
+    data: Partial<Omit<IAuthStoreValues, "isAuthenticated">>
+  ) => void;
   setAuthenticated: (isAuthenticated: boolean) => void;
   attemptAuthorization: () => Promise<AxiosResponse | AxiosError | null>;
 }

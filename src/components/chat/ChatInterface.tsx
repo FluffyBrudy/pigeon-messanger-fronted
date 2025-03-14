@@ -113,7 +113,7 @@ const ChatInterface = () => {
   return (
     <div className="flex flex-col h-screen w-full items-center box-border overflow-hidden">
       <div className="flex flex-[0.9] lg:flex-1 flex-col overflow-auto w-[90%] lg:w-[60%]">
-        {chatMessages.length > 0 && !disableLoadMore && (
+        {chatMessages.length > 50 && !disableLoadMore && (
           <button
             onClick={handleLoadMore}
             className="opacity-50 block mx-auto mb-2"
@@ -132,7 +132,7 @@ const ChatInterface = () => {
         </div>
       </div>
 
-      {chatMessages.length > 0 ? (
+      {activeChatId ? (
         <div className="w-full lg:w-[60%] sm:w-full p-2 flex-shrink-0">
           <MessengeInputBox
             setMessage={setMsgInput}
@@ -142,9 +142,7 @@ const ChatInterface = () => {
         </div>
       ) : (
         <div className="flex-1">
-          <p className="text-lg font-bold">
-            Pigeon is so sad, tell pigeon to search for friends
-          </p>
+          <p className="text-lg font-bold">No chat found</p>
         </div>
       )}
     </div>

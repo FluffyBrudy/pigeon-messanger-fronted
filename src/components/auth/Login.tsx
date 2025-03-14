@@ -4,7 +4,7 @@ import { object as yobject, string as ystring } from "yup";
 import { HOME_ROUTE, REGISTER_ROUTE } from "../../router/routerPath";
 import { api } from "../../api/interceptor";
 import { AUTH_LOGIN_POST, PREF_PROFILE_IMAGE_POST } from "../../api/endpoints";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { FieldWrapper } from "../form/FieldWrapper";
 import { ACCESS_TOKEN } from "../../api/constants";
 import { useAuthStore } from "../../store/authStore";
@@ -14,11 +14,14 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { uploadImageFromBlobUrl } from "../../service/preferences";
 import Avatar from "../common/Avatar";
 import { AxiosResponse } from "axios";
+import { IAuthStoreValues } from "../../types/store";
 
-interface SubmitValues {
+interface ISubmitValues {
   email: string;
   password: string;
 }
+
+type UserData = Omit<IAuthStoreValues, "isAuthenticated">;
 
 const LoginSchema = yobject().shape({
   email: ystring().email("Email is invalid").required("Email is required"),
@@ -35,12 +38,13 @@ const Login = () => {
   const navigation = useNavigate();
   const setAuthenticated = useAuthStore((state) => state.setAuthenticated);
   const setUserData = useAuthStore((state) => state.setUserData);
+  const userData = useRef<UserData | null>(null);
 
   const togglePasswordVisibility = () => {
     setShowPassword((state) => !state);
   };
 
-  const handleSubmit = async ({ email, password }: SubmitValues) => {
+  const handleSubmit = async ({ email, password }: ISubmitValues) => {
     setLoginError("");
     setShowPassword(false);
     setIsLoading(true);
@@ -50,11 +54,12 @@ const Login = () => {
 
     try {
       const res = await api.post(AUTH_LOGIN_POST, { email, password });
-      const { username, initialized, id, accessToken } = res.data
+      const { username, initialized, id, accessToken, imageUrl } = res.data
         .data as LoginData;
       console.log(initialized);
-      const userData = {
+      userData.current = {
         username,
+        imageUrl,
         isProfileInitialized: initialized,
         userId: id,
       };
@@ -65,7 +70,7 @@ const Login = () => {
         needUpdate = !initialized;
         username_ = username;
         setAuthenticated(true);
-        setUserData(userData);
+        setUserData(userData.current);
         localStorage.setItem(ACCESS_TOKEN, accessToken);
         localStorage.setItem("id", id);
         navigation(HOME_ROUTE);
@@ -85,7 +90,8 @@ const Login = () => {
       try {
         const imageUrl = await uploadImageFromBlobUrl(staticHtmlString);
         const uploadRes = await api.post(PREF_PROFILE_IMAGE_POST, { imageUrl });
-        console.log(uploadRes);
+        if (uploadRes.data.imageUrl)
+          setUserData({ imageUrl: uploadRes.data.imageUrl });
       } catch (error) {
         console.error(error);
       }

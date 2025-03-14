@@ -4,8 +4,10 @@ import { SILENT_LOGIN_POST } from "../api/endpoints";
 import { IAuthStore, IAuthStoreValues } from "../types/store";
 import { create } from "zustand";
 import { ACCESS_TOKEN } from "../api/constants";
+import { LoginData } from "../types/user";
 
 const defaultValue: IAuthStoreValues = {
+  imageUrl: null,
   userId: null,
   isAuthenticated: false,
   username: "",
@@ -16,7 +18,7 @@ export const useAuthStore = create<IAuthStore>((set) => ({
   ...defaultValue,
 
   setUserData(data) {
-    set({ ...data });
+    set((state) => ({ ...state, ...data }));
   },
 
   setAuthenticated(isAuthenticated: boolean) {
@@ -28,8 +30,15 @@ export const useAuthStore = create<IAuthStore>((set) => ({
       const accessToken = localStorage.getItem(ACCESS_TOKEN);
       if (!accessToken) return null;
       const res = await api.post(SILENT_LOGIN_POST);
+      const data = res.data.data as LoginData;
       if (res.status === 200)
-        set({ isAuthenticated: true, userId: res.data.data["id"] as string });
+        set({
+          isAuthenticated: true,
+          userId: data.id,
+          username: data.username,
+          isProfileInitialized: data.initialized,
+          imageUrl: data.imageUrl,
+        });
       return res;
     } catch (error) {
       console.log((error as Error).message);

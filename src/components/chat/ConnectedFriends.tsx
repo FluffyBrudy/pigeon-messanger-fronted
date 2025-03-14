@@ -56,15 +56,21 @@ const ConnectedFriends = () => {
 
   return (
     <div>
-      {connectedFriends.map((friend) => (
-        <ChatBubble
-          isTextBold={!activeChatId && latestMsg?.id === friend.userId}
-          key={friend.userId}
-          {...friend}
-          text={messages[friend.userId]}
-          handleClick={() => handleClick(friend.userId)}
-        />
-      ))}
+      {connectedFriends.length > 0 &&
+        connectedFriends.map((friend) => (
+          <ChatBubble
+            isTextBold={!activeChatId && latestMsg?.id === friend.userId}
+            key={friend.userId}
+            {...friend}
+            text={messages[friend.userId]}
+            handleClick={() => handleClick(friend.userId)}
+          />
+        ))}
+      {connectedFriends.length === 0 && (
+        <div>
+          <p className="font-bold text-center">No friends to show</p>
+        </div>
+      )}
     </div>
   );
 };
