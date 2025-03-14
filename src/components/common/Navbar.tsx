@@ -25,7 +25,7 @@ const Navbar: FC<NavbarProps> = ({
         orient === "v"
           ? "h-screen flex justify-between w-20 flex-col"
           : "h-16 w-full flex-row px-4 justify-between"
-      } bg-gray-900 text-white flex items-center py-4 ${className}`}
+      }  text-white flex items-center py-4 ${className}`}
     >
       <Profile />
       <div
