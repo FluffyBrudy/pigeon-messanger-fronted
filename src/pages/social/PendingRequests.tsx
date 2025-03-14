@@ -27,11 +27,20 @@ const PendingRequests = () => {
   const [activeTab, setActiveTab] = useState<PendingRequestType>(
     PendingRequestType.recv
   );
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = () => {
-      fetchPendingRequests(PendingRequestType.sent);
-      fetchPendingRequests(PendingRequestType.recv);
+    const fetchData = async () => {
+      try {
+        await Promise.all([
+          fetchPendingRequests(PendingRequestType.sent),
+          fetchPendingRequests(PendingRequestType.recv),
+        ]);
+        setIsLoading(false);
+      } catch (error) {
+        console.log((error as Error).message);
+      }
+      setIsLoading(false);
     };
     fetchData();
   }, [fetchPendingRequests]);
@@ -98,7 +107,7 @@ const PendingRequests = () => {
         {activeTab === "sent" ? (
           sentRequests.length === 0 ? (
             <p className="text-white font-bold">
-              You haven't sent any requests.
+              {isLoading ? "please wait..." : "You haven't sent any requests."}
             </p>
           ) : (
             <div className="space-y-4">
@@ -120,7 +129,10 @@ const PendingRequests = () => {
             </div>
           )
         ) : recvRequests.length === 0 ? (
-          <p className="text-white font-bold">You have no pending requests.</p>
+          <p className="text-white font-bold">
+            {" "}
+            {isLoading ? "please wait..." : "You have no pending requests."}
+          </p>
         ) : (
           <div className="space-y-4">
             {recvRequests.map((request) => (

@@ -3,6 +3,8 @@ import { useConnectedFriendStore } from "../../store/connectedFriendsStore";
 import ChatBubble from "./ChatBubble";
 import { api } from "../../api/interceptor";
 import { LATEST_SINGLE_CHAT_MESSAGES } from "../../api/endpoints";
+import { useLocation, useNavigate } from "react-router-dom";
+import { HOME_ROUTE } from "../../router/routerPath";
 
 type LastSingleChatMsgResponse = Array<{ id: string; message: string }>;
 
@@ -13,6 +15,8 @@ const ConnectedFriends = () => {
   const setActiveChatId = useConnectedFriendStore(
     (state) => state.setActiveChatId
   );
+  const currentLocation = useLocation();
+  const navigate = useNavigate();
   const { connectedFriends, latestMsg, activeChatId } =
     useConnectedFriendStore();
   const [messages, setMessages] = useState<Record<string, string>>({});
@@ -52,6 +56,9 @@ const ConnectedFriends = () => {
 
   const handleClick = (id: string) => {
     setActiveChatId(id);
+    if (currentLocation.pathname !== HOME_ROUTE) {
+      navigate(HOME_ROUTE);
+    }
   };
 
   return (

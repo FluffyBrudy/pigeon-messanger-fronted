@@ -12,7 +12,7 @@ const Menu: React.FC<MenuProps> = ({ children, pos = { top: 0, left: 0 } }) => {
         top: `${pos.top}px`,
         left: `${pos.left}px`,
       }}
-      className="absolute z-[100] w-[min(99vw,300px)] p-2 rounded-md shadow-xl 
+      className="absolute z-[100] w-[50vw] lg:w-[300px] rounded-md shadow-xl 
                  flex justify-center bg-gray-800/90 border border-gray-600 backdrop-blur-md"
     >
       {children}
