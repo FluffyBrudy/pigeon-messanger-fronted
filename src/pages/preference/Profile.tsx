@@ -11,10 +11,10 @@ const Profile = () => {
 
   useEffect(() => {
     if (profileRef.current) {
-      const { bottom, right } = profileRef.current.getBoundingClientRect();
+      const { bottom, left } = profileRef.current.getBoundingClientRect();
       setMenuPosition({
-        top: Math.floor(bottom / 1.5),
-        left: Math.floor(right / 2),
+        top: Math.floor(bottom),
+        left: Math.floor(left),
       });
     }
   }, []);
@@ -24,10 +24,10 @@ const Profile = () => {
     setState(newState);
 
     if (profileRef.current && newState !== "") {
-      const { bottom, right } = profileRef.current.getBoundingClientRect();
+      const { bottom, left } = profileRef.current.getBoundingClientRect();
       setMenuPosition({
-        top: Math.floor(bottom / 1.5),
-        left: Math.floor(right / 2),
+        top: Math.floor(bottom),
+        left: Math.floor(left),
       });
     }
   };
