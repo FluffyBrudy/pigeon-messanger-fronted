@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Menu, Home, Users, UserPlus } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   ACCEPTED_FRIENDS_ROUTE,
   HOME_ROUTE,
@@ -29,30 +29,38 @@ const Navbar: FC<NavbarProps> = ({
     >
       <Profile />
       <div
-        className={`flex ${
+        className={`text-xs flex ${
           orient === "v"
             ? "flex-col gap-6"
             : "flex-row gap-4 flex-1 justify-center"
         } items-center`}
       >
-        <NavLink to={HOME_ROUTE} className="flex flex-col items-center gap-1">
-          <Home size={24} />
-          <span className="text-xs">Home</span>
-        </NavLink>
-        <NavLink
-          to={ACCEPTED_FRIENDS_ROUTE}
-          className="flex flex-col items-center gap-1"
-        >
-          <Users size={24} />
-          <span className="text-xs">Friends</span>
-        </NavLink>
-        <NavLink
-          to={PENDING_REQUESTS_ROUTE}
-          className="flex flex-col items-center gap-1"
-        >
-          <UserPlus size={24} />
-          <span className="text-xs">Requests</span>
-        </NavLink>
+        <div className="flex flex-col items-center gap-1 relative">
+          <Link
+            to={HOME_ROUTE}
+            className="absolute block top-0 left-0 w-full z-10 h-full"
+          />
+          <Home className="w-[5vmin]" />
+          <span>Home</span>
+        </div>
+
+        <div className="flex flex-col items-center gap-1 relative">
+          <Link
+            to={ACCEPTED_FRIENDS_ROUTE}
+            className="absolute block top-0 left-0 w-full z-10 h-full"
+          />
+          <Users className="w-[5vmin]" />
+          <span>Friends</span>
+        </div>
+
+        <div className="flex flex-col items-center gap-1 relative">
+          <Link
+            to={PENDING_REQUESTS_ROUTE}
+            className="absolute block top-0 left-0 w-full z-10 h-full"
+          />
+          <UserPlus className="w-[5vmin]" />
+          <span>Requests</span>
+        </div>
       </div>
 
       {orient === "v" ? <div /> : null}
