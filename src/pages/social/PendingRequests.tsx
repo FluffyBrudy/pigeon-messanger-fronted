@@ -53,6 +53,7 @@ const PendingRequests = () => {
       .then((res) => {
         if (res.status === 200) {
           filterPendingRequest(friendId);
+          fetchConnectedFriends();
           SocketSingleton.emitEvent(SERVER_EVENTS.CONNECT_FRIEND, { friendId });
         }
       })
@@ -145,7 +146,6 @@ const PendingRequests = () => {
                 <button
                   onClick={() => {
                     acceptRequest(request.userId);
-                    fetchConnectedFriends();
                   }}
                   className="px-4 py-1 text-sm font-medium bg-lime-500 text-black rounded-md shadow-sm hover:bg-lime-600 transition"
                 >
