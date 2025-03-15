@@ -18,30 +18,30 @@ async function generatePrefProfileSignature(): SignatureResult {
   }
 }
 
-export const uploadImageFromBlobUrl = async (staticHtmlString: string) => {
-  const blob = new Blob([staticHtmlString], {
+export const uploadImage = async (fileOrHtmlString: string | File) => {
+  let file: File;
+  const blob = new Blob([fileOrHtmlString], {
     type: "image/svg+xml;charset=utf-8",
   });
-  const file = new File([blob], "Avatar.svg", { type: blob.type });
+  if (typeof fileOrHtmlString === "string") {
+    file = new File([blob], Math.random().toString(8) + ".svg", {
+      type: blob.type,
+    });
+  } else {
+    file = fileOrHtmlString;
+  }
 
   const [data, error] = await generatePrefProfileSignature();
-
-  if (error) return error;
   console.log(data);
+  if (!data || error) return error;
+
   const { signature, timestamp } = data!;
-  console.log(signature, signature);
   const formData = new FormData();
   formData.append("file", file);
   formData.append("api_key", import.meta.env.VITE_CLOUD_API_KEY);
   formData.append("signature", signature);
   formData.append("timestamp", timestamp.toString());
   formData.append("folder", "pigeon-messanger");
-  console.log(
-    signature,
-    timestamp.toString(),
-    import.meta.env.VITE_CLOUD_API_KEY,
-    import.meta.env.VITE_CLOUD_URL
-  );
 
   try {
     const resImg = await axios.post(import.meta.env.VITE_CLOUD_URL, formData);
