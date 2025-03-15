@@ -11,7 +11,7 @@ import { useAuthStore } from "../../store/authStore";
 import { EyeClosed, EyeIcon } from "lucide-react";
 import { LoginData } from "../../types/user";
 import { renderToStaticMarkup } from "react-dom/server";
-import { uploadImageFromBlobUrl } from "../../service/preferences";
+import { uploadImageFromBlobUrl } from "../../service/mediaUpload";
 import Avatar from "../common/Avatar";
 import { AxiosResponse } from "axios";
 import { IAuthStoreValues } from "../../types/store";
