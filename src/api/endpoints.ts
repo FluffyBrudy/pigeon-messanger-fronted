@@ -19,5 +19,5 @@ export const LATEST_SINGLE_CHAT_MESSAGES = "/chat/message/fetch/latest";
 export const SILENT_LOGIN_POST = "/silent/login";
 
 //preference route
-export const PREF_PROFILE_SIGNATURE_GET = "/preference/profile/signature";
+export const PREF_PROFILE_SIGNATURE_GET = "/preference/profile/signature"; //Remainder: need backend update as signature can be made generic
 export const PREF_PROFILE_IMAGE_POST = "/preference/profile/image";
