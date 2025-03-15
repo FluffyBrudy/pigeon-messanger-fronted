@@ -11,7 +11,7 @@ import { useAuthStore } from "../../store/authStore";
 import { EyeClosed, EyeIcon } from "lucide-react";
 import { LoginData } from "../../types/user";
 import { renderToStaticMarkup } from "react-dom/server";
-import { uploadImageFromBlobUrl } from "../../service/mediaUpload";
+import { uploadImage } from "../../service/mediaUpload";
 import Avatar from "../common/Avatar";
 import { AxiosResponse } from "axios";
 import { IAuthStoreValues } from "../../types/store";
@@ -92,7 +92,7 @@ const Login = () => {
         <Avatar name={username_} />
       );
       try {
-        const imageUrl = await uploadImageFromBlobUrl(staticHtmlString);
+        const imageUrl = await uploadImage(staticHtmlString);
         const uploadRes = await api.post(PREF_PROFILE_IMAGE_POST, { imageUrl });
         if (uploadRes.data.imageUrl)
           setUserData({ imageUrl: uploadRes.data.imageUrl });
