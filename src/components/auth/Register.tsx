@@ -6,6 +6,7 @@ import { api } from "../../api/interceptor";
 import { AUTH_REGISTER_POST } from "../../api/endpoints";
 import { useState } from "react";
 import { FieldWrapper } from "../form/FieldWrapper";
+import { AxiosResponse } from "axios";
 
 interface SubmitValues {
   username: string;
@@ -30,6 +31,7 @@ const RegisterSchema = yobject().shape({
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const navigation = useNavigate();
 
   const handleSubmit = async ({ username, email, password }: SubmitValues) => {
@@ -44,7 +46,7 @@ const Register = () => {
       navigation(LOGIN_ROUTE);
     } catch (err) {
       setIsLoading(false);
-      console.log(err);
+      setError((err as AxiosResponse).data.error);
     }
   };
 
@@ -60,6 +62,9 @@ const Register = () => {
       <div className="relative py-3 w-[min(700px,97vw)] sm:mx-auto">
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-sky-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
         <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+          <div className="font-bold absolute top-1 left-[50%] translate-x-[-50%] text-red-800">
+            <p>{error}</p>
+          </div>
           <div className="max-w-md mx-auto">
             <div>
               <h1 className="text-2xl font-semibold">Register</h1>
