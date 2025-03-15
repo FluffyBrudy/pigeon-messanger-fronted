@@ -39,8 +39,8 @@ export const useConnectedFriendStore = create<IConnectedFriendsStore>()(
       }
     },
 
-    setLatestMessage(id: string, message: string) {
-      set({ latestMsg: { id, message } });
+    setLatestMessage(id: string, message: string, isFile = false) {
+      set({ latestMsg: { id, message, isFile } });
     },
   })
 );

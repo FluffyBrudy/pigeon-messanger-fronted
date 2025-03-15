@@ -11,6 +11,7 @@ import MessageBubble from "./MessageBubble";
 import { SocketSingleton } from "../../socket/socket";
 import { SERVER_EVENTS } from "../../socket/constants";
 import SkeletonChatBubble from "../../animation/SkeletonChatBubble";
+import { uploadImage } from "../../service/mediaUpload";
 
 const ChatInterface = () => {
   const { activeChatId, chatMessages } = useConnectedFriendStore();
@@ -22,6 +23,7 @@ const ChatInterface = () => {
   );
   const [messagesLoading, setMessagesLoading] = useState(true);
   const [msgInput, setMsgInput] = useState("");
+  const [fileInput, setFileInput] = useState<File | null>(null); //Remainder: only dealing with url since image uploaded to cloud
   const [disableLoadMore, setDisableLoadMore] = useState(false);
   const msgEndRef = useRef<HTMLDivElement | null>(null);
   const userId = useRef(localStorage.getItem("id"));
@@ -62,24 +64,32 @@ const ChatInterface = () => {
   }, [chatMessages]);
 
   const handleSend = async () => {
-    if (msgInput.trim().length === 0) return;
+    if (msgInput.trim().length === 0 && !fileInput) return;
     if (!activeChatId) return;
     try {
+      const fileLink = fileInput && (await uploadImage(fileInput));
+      console.log(fileLink);
       const msgResponse = await api.post(CHAT_MESSAGE_CREATE_POST, {
         recipientId: activeChatId,
-        message: msgInput,
+        message: fileLink || msgInput,
+        isFile: !!fileLink,
       });
       if (msgResponse.status === 200) {
         const { creatorId, message } = msgResponse.data
           .data as CreateChatMessageResponse;
+        const msg = fileLink || message;
         SocketSingleton.emitEvent(SERVER_EVENTS.CHAT_MESSAGE, {
           creatorId: userId.current,
-          message: msgInput,
+          message: msg,
           recipientId: [activeChatId],
         });
-        setChatMessages([{ creatorId, messageBody: message }], "a");
-        setLatestMessage(activeChatId, message);
+        setChatMessages(
+          [{ creatorId, messageBody: message, isFile: !!fileInput }],
+          "a"
+        );
+        setLatestMessage(activeChatId, msg, !!fileLink);
         setMsgInput("");
+        setFileInput(null);
       }
     } catch (err) {
       console.error((err as Error).message);
@@ -110,6 +120,7 @@ const ChatInterface = () => {
         <SkeletonChatBubble count={10} />
       </div>
     );
+  console.log(chatMessages);
   return (
     <div className="flex flex-col h-screen w-full items-center box-border overflow-hidden">
       <div className="flex flex-[0.9] lg:flex-1 flex-col overflow-auto w-[90%] lg:w-[60%]">
@@ -127,6 +138,7 @@ const ChatInterface = () => {
               key={i}
               isUser={userId.current === chat.creatorId}
               message={chat.messageBody}
+              isFile={chat.isFile}
             />
           ))}
         </div>
@@ -137,6 +149,8 @@ const ChatInterface = () => {
           <MessengeInputBox
             setMessage={setMsgInput}
             message={msgInput}
+            file={fileInput}
+            setFile={setFileInput}
             handleSubmit={handleSend}
           />
         </div>

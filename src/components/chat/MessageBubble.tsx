@@ -3,9 +3,14 @@ import { FC } from "react";
 interface MessageBubbleProps {
   isUser: boolean;
   message: string;
+  isFile?: boolean;
 }
 
-const MessageBubble: FC<MessageBubbleProps> = ({ isUser, message }) => {
+const MessageBubble: FC<MessageBubbleProps> = ({
+  isUser,
+  message,
+  isFile = false,
+}) => {
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"} my-1`}>
       <div
@@ -17,9 +22,13 @@ const MessageBubble: FC<MessageBubbleProps> = ({ isUser, message }) => {
           }
         `}
       >
-        <p className="text-md font-poppins leading-snug break-words">
-          {message}
-        </p>
+        {!isFile ? (
+          <p className="text-md font-poppins leading-snug break-words">
+            {message}
+          </p>
+        ) : (
+          <img src={message} />
+        )}
       </div>
     </div>
   );

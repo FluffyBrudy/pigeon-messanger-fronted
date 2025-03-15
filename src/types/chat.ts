@@ -7,6 +7,7 @@ export interface CreateChatMessageResponse {
 export interface FetchChatMessageResponse {
   creatorId: string;
   messageBody: string;
+  isFile?: boolean;
 }
 
 export interface FetchChatResponse {
