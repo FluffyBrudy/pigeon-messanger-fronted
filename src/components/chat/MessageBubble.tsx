@@ -4,12 +4,14 @@ interface MessageBubbleProps {
   isUser: boolean;
   message: string;
   isFile?: boolean;
+  isLast?: boolean;
 }
 
 const MessageBubble: FC<MessageBubbleProps> = ({
   isUser,
   message,
   isFile = false,
+  isLast = false,
 }) => {
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"} my-1`}>
@@ -23,7 +25,11 @@ const MessageBubble: FC<MessageBubbleProps> = ({
         `}
       >
         {!isFile ? (
-          <p className="text-md font-poppins leading-snug break-words">
+          <p
+            className={`text-md font-poppins leading-snug break-words ${
+              isLast ? "opacity-20" : ""
+            }`}
+          >
             {message}
           </p>
         ) : (

@@ -25,7 +25,9 @@ const ChatInterface = () => {
   const [msgInput, setMsgInput] = useState("");
   const [fileInput, setFileInput] = useState<File | null>(null); //Remainder: only dealing with url since image uploaded to cloud
   const [disableLoadMore, setDisableLoadMore] = useState(false);
+  const [unsentIndex, setUnsentIndex] = useState<number[]>([]);
   const msgEndRef = useRef<HTMLDivElement | null>(null);
+  const msgCountRef = useRef<number>(0);
   const userId = useRef(localStorage.getItem("id"));
   const cursorId = useRef<string | undefined>(undefined);
 
@@ -46,6 +48,7 @@ const ChatInterface = () => {
             const data = res.data.data as FetchChatResponse;
 
             setChatMessages(data.chats.reverse());
+            msgCountRef.current = data.chats.length;
             cursorId.current = data.cursor;
           }
         })
@@ -68,32 +71,42 @@ const ChatInterface = () => {
     if (!activeChatId) return;
     try {
       const fileLink = fileInput && (await uploadImage(fileInput));
-      
+      const currentIndex = msgCountRef.current;
+      if (currentIndex)
+        setUnsentIndex((state) => [...state, msgCountRef.current]);
+      setChatMessages(
+        [
+          {
+            creatorId: userId.current!,
+            messageBody: msgInput,
+            isFile: !!fileInput,
+          },
+        ],
+        "a"
+      );
       const msgResponse = await api.post(CHAT_MESSAGE_CREATE_POST, {
         recipientId: activeChatId,
         message: fileLink || msgInput,
         isFile: !!fileLink,
       });
       if (msgResponse.status === 200) {
-        const { creatorId, message } = msgResponse.data
-          .data as CreateChatMessageResponse;
+        const { message } = msgResponse.data.data as CreateChatMessageResponse;
         const msg = fileLink || message;
         SocketSingleton.emitEvent(SERVER_EVENTS.CHAT_MESSAGE, {
           creatorId: userId.current,
           message: msg,
           recipientId: [activeChatId],
         });
-        setChatMessages(
-          [{ creatorId, messageBody: message, isFile: !!fileInput }],
-          "a"
-        );
+        setUnsentIndex((state) => state.filter((i) => i !== currentIndex));
+        msgCountRef.current += 1;
         setLatestMessage(activeChatId, msg, !!fileLink);
-        setMsgInput("");
         setFileInput(null);
       }
     } catch (err) {
+      msgCountRef.current += 1;
       console.error((err as Error).message);
     }
+    console.log(msgCountRef.current, unsentIndex);
   };
 
   const handleLoadMore = async () => {
@@ -120,7 +133,7 @@ const ChatInterface = () => {
         <SkeletonChatBubble count={10} />
       </div>
     );
-  
+
   return (
     <div className="flex flex-col h-screen w-full items-center box-border overflow-hidden">
       <div className="flex flex-[0.9] lg:flex-1 flex-col overflow-auto w-[90%] lg:w-[60%]">
@@ -133,14 +146,16 @@ const ChatInterface = () => {
           </button>
         )}
         <div ref={msgEndRef}>
-          {chatMessages.map((chat, i) => (
-            <MessageBubble
-              key={i}
-              isUser={userId.current === chat.creatorId}
-              message={chat.messageBody}
-              isFile={chat.isFile}
-            />
-          ))}
+          {chatMessages.length > 0 &&
+            chatMessages.map((chat, i) => (
+              <MessageBubble
+                key={i}
+                isUser={userId.current === chat.creatorId}
+                message={chat.messageBody}
+                isFile={chat.isFile}
+                isLast={unsentIndex.includes(i)}
+              />
+            ))}
         </div>
       </div>
 

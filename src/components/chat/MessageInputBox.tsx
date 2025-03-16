@@ -7,7 +7,7 @@ import {
   useState,
   useRef,
 } from "react";
-import { Send, Loader2, File } from "lucide-react";
+import { Send, File } from "lucide-react";
 
 interface MessageInputBoxProps {
   file: File | null;
@@ -38,10 +38,10 @@ const MessageInputBox: FC<MessageInputBoxProps> = ({
   };
 
   const onHandleSubmit = async () => {
+    setMessage("");
     setIsSending(true);
     await handleSubmit();
     setIsSending(false);
-    setMessage("");
   };
 
   const handleFileSubmit = async () => {
@@ -50,7 +50,6 @@ const MessageInputBox: FC<MessageInputBoxProps> = ({
 
   const handleFileChange = async () => {
     if (fileRef.current) {
-      
       const files = fileRef.current.files;
       if (files && files.length > 0) {
         setFile(files[0]);
@@ -66,7 +65,6 @@ const MessageInputBox: FC<MessageInputBoxProps> = ({
         onChange={handleMessageChange}
         onKeyDown={handleEnterPress}
         placeholder="Type a message..."
-        disabled={isSending}
         className="flex-1 px-4 py-2 bg-transparent outline-none text-gray-900 placeholder-gray-500 disabled:opacity-50"
       />
 
@@ -90,11 +88,7 @@ const MessageInputBox: FC<MessageInputBoxProps> = ({
           disabled={(message.trim() === "" && !file) || isSending}
           className="p-2 rounded-full bg-blue-500 hover:bg-blue-600 text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
         >
-          {isSending ? (
-            <Loader2 className="animate-spin w-[2vmin] h-auto" />
-          ) : (
-            <Send className="w-[2vmin] h-auto" />
-          )}
+          <Send className="w-[2vmin] h-auto" />
         </button>
       </div>
     </div>
