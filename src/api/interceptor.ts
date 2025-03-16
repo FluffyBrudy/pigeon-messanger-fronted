@@ -26,7 +26,8 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject((error as AxiosError).response || CONNECTION_ERROR)
+  (error) =>
+    Promise.reject((error as AxiosError).response?.data || CONNECTION_ERROR)
 );
 
 export { api };
