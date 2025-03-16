@@ -10,6 +10,7 @@ import {
 import { SocketSingleton } from "../../socket/socket";
 import { SERVER_EVENTS } from "../../socket/constants";
 import { useConnectedFriendStore } from "../../store/connectedFriendsStore";
+import { AxiosResponse } from "axios";
 
 const PendingRequests = () => {
   const fetchPendingRequests = usePendingRequestsStore(
@@ -38,7 +39,9 @@ const PendingRequests = () => {
         ]);
         setIsLoading(false);
       } catch (error) {
-        console.log((error as Error).message);
+        const err =
+          (error as AxiosResponse).data.error || (error as Error).message;
+        console.error(err);
       }
       setIsLoading(false);
     };

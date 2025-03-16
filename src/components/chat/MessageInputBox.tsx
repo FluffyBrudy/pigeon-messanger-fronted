@@ -50,7 +50,7 @@ const MessageInputBox: FC<MessageInputBoxProps> = ({
 
   const handleFileChange = async () => {
     if (fileRef.current) {
-      console.log(fileRef.current.files);
+      
       const files = fileRef.current.files;
       if (files && files.length > 0) {
         setFile(files[0]);

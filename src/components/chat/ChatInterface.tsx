@@ -68,7 +68,7 @@ const ChatInterface = () => {
     if (!activeChatId) return;
     try {
       const fileLink = fileInput && (await uploadImage(fileInput));
-      console.log(fileLink);
+      
       const msgResponse = await api.post(CHAT_MESSAGE_CREATE_POST, {
         recipientId: activeChatId,
         message: fileLink || msgInput,
@@ -120,7 +120,7 @@ const ChatInterface = () => {
         <SkeletonChatBubble count={10} />
       </div>
     );
-  console.log(chatMessages);
+  
   return (
     <div className="flex flex-col h-screen w-full items-center box-border overflow-hidden">
       <div className="flex flex-[0.9] lg:flex-1 flex-col overflow-auto w-[90%] lg:w-[60%]">

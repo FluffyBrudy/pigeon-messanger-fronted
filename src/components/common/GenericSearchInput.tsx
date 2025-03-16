@@ -26,7 +26,7 @@ const GenericSearchInput = ({
 
     timeoutRef.current = window.setTimeout(() => {
       onSearch(value);
-      console.log(value);
+      
     }, debounceTime);
   };
 

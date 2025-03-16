@@ -13,7 +13,7 @@ async function generatePrefProfileSignature(): SignatureResult {
 
     return [data.data, null];
   } catch (error) {
-    console.log(error);
+    
     return [null, (error as Error).message];
   }
 }
@@ -32,7 +32,7 @@ export const uploadImage = async (fileOrHtmlString: string | File) => {
   }
 
   const [data, error] = await generatePrefProfileSignature();
-  console.log(data);
+  
   if (!data || error) return error;
 
   const { signature, timestamp } = data!;
@@ -45,7 +45,7 @@ export const uploadImage = async (fileOrHtmlString: string | File) => {
 
   try {
     const resImg = await axios.post(import.meta.env.VITE_CLOUD_URL, formData);
-    console.log(resImg.data.secure_url);
+    
     return resImg.data.secure_url;
   } catch (error) {
     const err = error as AxiosError;

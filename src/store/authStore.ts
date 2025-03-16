@@ -41,7 +41,7 @@ export const useAuthStore = create<IAuthStore>((set) => ({
         });
       return res;
     } catch (error) {
-      console.log((error as Error).message);
+      
       set({ isAuthenticated: false, userId: null });
       return error as AxiosError;
     }

@@ -30,7 +30,7 @@ export class SocketSingleton {
   static disconnect() {
     if (SocketSingleton.instance) {
       SocketSingleton.instance.disconnect();
-      console.log("Socket disconnected");
+
       SocketSingleton.instance = null;
       SocketSingleton.isActive = false;
     }
@@ -41,9 +41,7 @@ export class SocketSingleton {
       console.error("Unable to connect to socket server");
       return;
     }
-    this.instance?.emit(eventName, data, (response: unknown) => {
-      console.log(response);
-    });
+    this.instance?.emit(eventName, data);
   }
 
   static connectSocket() {

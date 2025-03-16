@@ -60,7 +60,7 @@ const Login = () => {
       const res = await api.post(AUTH_LOGIN_POST, { email, password });
       const { username, initialized, id, accessToken, imageUrl } = res.data
         .data as LoginData;
-      console.log(initialized);
+      
       userData.current = {
         username,
         imageUrl,
