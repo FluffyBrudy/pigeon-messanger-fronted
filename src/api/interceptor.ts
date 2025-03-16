@@ -26,8 +26,15 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => response,
-  (error) =>
-    Promise.reject((error as AxiosError).response?.data || CONNECTION_ERROR)
+  (error) => {
+    const errResponse = (error as AxiosError).response;
+    if (errResponse) {
+      const { data, status, statusText } = errResponse;
+      return Promise.reject({ data, status, statusText });
+    } else {
+      return Promise.reject({ data: { error: CONNECTION_ERROR } });
+    }
+  }
 );
 
 export { api };
