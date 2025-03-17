@@ -23,7 +23,7 @@ const ChatInterface = () => {
   );
   const [messagesLoading, setMessagesLoading] = useState(true);
   const [msgInput, setMsgInput] = useState("");
-  const [fileInput, setFileInput] = useState<File | null>(null); //Remainder: only dealing with url since image uploaded to cloud
+  const [fileInput, setFileInput] = useState<File | null>(null);
   const [disableLoadMore, setDisableLoadMore] = useState(false);
   const [unsentIndex, setUnsentIndex] = useState<number[]>([]);
   const msgEndRef = useRef<HTMLDivElement | null>(null);
