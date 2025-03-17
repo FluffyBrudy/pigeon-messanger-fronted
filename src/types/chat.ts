@@ -14,4 +14,6 @@ export interface FetchChatResponse {
   chats: Array<FetchChatMessageResponse>;
   limit: number;
   cursor: string;
+  username: string;
+  imageUrl: string;
 }

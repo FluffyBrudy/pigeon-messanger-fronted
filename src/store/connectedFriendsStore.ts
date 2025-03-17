@@ -9,6 +9,8 @@ export const useConnectedFriendStore = create<IConnectedFriendsStore>()(
     activeChatId: null,
     latestMsg: null,
     chatMessages: [],
+    username: "",
+    imageUrl: "",
     connectedFriends: [],
     async fetchConnectedFriends() {
       try {
@@ -21,6 +23,7 @@ export const useConnectedFriendStore = create<IConnectedFriendsStore>()(
         console.error(err as Error);
       }
     },
+
     setActiveChatId(id) {
       set({ activeChatId: id });
     },
@@ -37,6 +40,10 @@ export const useConnectedFriendStore = create<IConnectedFriendsStore>()(
       } else {
         set({ chatMessages: messages });
       }
+    },
+
+    setProfileInfo(username, imageUrl) {
+      set({ username, imageUrl });
     },
 
     setLatestMessage(id: string, message: string, isFile = false) {

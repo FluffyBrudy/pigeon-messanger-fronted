@@ -47,6 +47,8 @@ export interface IAddFriendStore {
 export interface IConnectedFriendsStore {
   activeChatId: string | null; //when user is clicked, it is considered to be active chat that user is chatting with
   chatMessages: Array<FetchChatMessageResponse>;
+  username: string;
+  imageUrl: string;
   connectedFriends: Array<ConnectedFriend>;
   latestMsg: null | { id: string; message: string; isFile: boolean };
   fetchConnectedFriends: () => Promise<void>;
@@ -55,5 +57,6 @@ export interface IConnectedFriendsStore {
     messages: Array<FetchChatMessageResponse>,
     order?: "a" | "p"
   ) => void;
+  setProfileInfo: (username: string, imageUrl: string) => void;
   setLatestMessage: (id: string, message: string, isFile?: boolean) => void;
 }

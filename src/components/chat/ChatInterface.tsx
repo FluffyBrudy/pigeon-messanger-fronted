@@ -14,13 +14,18 @@ import SkeletonChatBubble from "../../animation/SkeletonChatBubble";
 import { uploadImage } from "../../service/mediaUpload";
 
 const ChatInterface = () => {
-  const { activeChatId, chatMessages } = useConnectedFriendStore();
+  const { activeChatId, chatMessages, username, imageUrl } =
+    useConnectedFriendStore();
   const setChatMessages = useConnectedFriendStore(
     (state) => state.setChatMessages
   );
   const setLatestMessage = useConnectedFriendStore(
     (state) => state.setLatestMessage
   );
+  const setProfileInfo = useConnectedFriendStore(
+    (state) => state.setProfileInfo
+  );
+
   const [messagesLoading, setMessagesLoading] = useState(true);
   const [msgInput, setMsgInput] = useState("");
   const [fileInput, setFileInput] = useState<File | null>(null);
@@ -46,8 +51,8 @@ const ChatInterface = () => {
           if (res.status === 200) {
             setMessagesLoading(false);
             const data = res.data.data as FetchChatResponse;
-
             setChatMessages(data.chats.reverse());
+            setProfileInfo(data.username, data.imageUrl);
             msgCountRef.current = data.chats.length;
             cursorId.current = data.cursor;
           }
@@ -58,7 +63,7 @@ const ChatInterface = () => {
         });
     };
     fetchMsgs();
-  }, [activeChatId, setChatMessages]);
+  }, [activeChatId, setChatMessages, setProfileInfo]);
 
   useEffect(() => {
     if (msgEndRef.current) {
@@ -136,6 +141,15 @@ const ChatInterface = () => {
 
   return (
     <div className="flex flex-col h-screen w-full items-center box-border overflow-hidden">
+      <div className="flex items-center w-full px-4 py-2">
+        <img
+          src={imageUrl}
+          className="w-10 h-10 rounded-full object-cover"
+          alt="User"
+        />
+        <p className="ml-2 font-medium">{username}</p>
+      </div>
+
       <div className="flex flex-[0.9] lg:flex-1 flex-col overflow-auto w-[90%] lg:w-[60%]">
         {chatMessages.length > 50 && !disableLoadMore && (
           <button
