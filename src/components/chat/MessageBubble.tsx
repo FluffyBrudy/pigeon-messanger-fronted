@@ -1,4 +1,6 @@
-import { FC } from "react";
+import { FC, useState } from "react";
+import ImagePreview from "../ui/ImagePreview";
+import { isValidUrl } from "../../utils/urlUtils";
 
 interface MessageBubbleProps {
   isUser: boolean;
@@ -13,6 +15,8 @@ const MessageBubble: FC<MessageBubbleProps> = ({
   isFile = false,
   isLast = false,
 }) => {
+  const [preview, setPreview] = useState(false);
+  const isUrlValid = isValidUrl(message);
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"} my-1`}>
       <div
@@ -25,15 +29,31 @@ const MessageBubble: FC<MessageBubbleProps> = ({
         `}
       >
         {!isFile ? (
-          <p
-            className={`text-md font-poppins leading-snug break-words ${
-              isLast ? "opacity-20" : ""
-            }`}
-          >
-            {message}
-          </p>
+          isUrlValid.valid ? (
+            <div>
+              <a target="_blank" href={message}>
+                {message}
+              </a>
+              <iframe src={message}></iframe>
+            </div>
+          ) : (
+            <p
+              className={`text-md font-poppins leading-snug break-words ${
+                isLast ? "opacity-20" : ""
+              }`}
+            >
+              {message}
+            </p>
+          )
         ) : (
-          <img src={message} />
+          <img
+            src={message}
+            className="cursor-pointer rounded-lg max-w-full"
+            onClick={() => setPreview(true)}
+          />
+        )}
+        {preview && (
+          <ImagePreview imageUrl={message} onClose={() => setPreview(false)} />
         )}
       </div>
     </div>

@@ -30,7 +30,7 @@ const Root = () => {
 
       <div className="flex flex-1 relative">
         <div
-          className={`lg:flex lg:relative absolute top-0 right-0 h-full bg-white shadow-lg transition-transform duration-300 z-40 
+          className={`lg:flex lg:relative absolute top-0 right-0 h-full bg-white shadow-lg transition-transform duration-300 z-40
             ${
               forceShowMenu ? "translate-x-0" : "translate-x-full"
             } lg:translate-x-0`}
