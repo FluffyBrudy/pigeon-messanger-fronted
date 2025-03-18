@@ -9,8 +9,7 @@ export function isValidUrl(url: string) {
   try {
     const validUrl = new URL(url);
     return { valid: isUrlComplete(validUrl), pathname: validUrl.pathname };
-  } catch (error) {
-    console.error((error as Error).message);
-    return { valid: false, pathname: "" };
+  } catch (err) {
+    return { valid: false, pathname: "", err: (err as Error).message };
   }
 }
