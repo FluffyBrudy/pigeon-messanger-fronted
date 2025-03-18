@@ -1,6 +1,5 @@
-import { FC, useState } from "react";
-import ImagePreview from "../ui/ImagePreview";
-import { isValidUrl } from "../../utils/urlUtils";
+import { FC } from "react";
+import { useMediaPreviewStore } from "../../store/mediaPreviewStore";
 
 interface MessageBubbleProps {
   isUser: boolean;
@@ -15,8 +14,8 @@ const MessageBubble: FC<MessageBubbleProps> = ({
   isFile = false,
   isLast = false,
 }) => {
-  const [preview, setPreview] = useState(false);
-  const isUrlValid = isValidUrl(message);
+  const setMediaUrl = useMediaPreviewStore((state) => state.setMediaUrl);
+
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"} my-1`}>
       <div
@@ -29,31 +28,19 @@ const MessageBubble: FC<MessageBubbleProps> = ({
         `}
       >
         {!isFile ? (
-          isUrlValid.valid ? (
-            <div>
-              <a target="_blank" href={message}>
-                {message}
-              </a>
-              <iframe src={message}></iframe>
-            </div>
-          ) : (
-            <p
-              className={`text-md font-poppins leading-snug break-words ${
-                isLast ? "opacity-20" : ""
-              }`}
-            >
-              {message}
-            </p>
-          )
+          <p
+            className={`text-md font-poppins leading-snug break-words ${
+              isLast ? "opacity-20" : ""
+            }`}
+          >
+            {message}
+          </p>
         ) : (
           <img
             src={message}
+            onClick={() => setMediaUrl(message)}
             className="cursor-pointer rounded-lg max-w-full"
-            onClick={() => setPreview(true)}
           />
-        )}
-        {preview && (
-          <ImagePreview imageUrl={message} onClose={() => setPreview(false)} />
         )}
       </div>
     </div>

@@ -60,3 +60,8 @@ export interface IConnectedFriendsStore {
   setProfileInfo: (username: string, imageUrl: string) => void;
   setLatestMessage: (id: string, message: string, isFile?: boolean) => void;
 }
+
+export interface IMediaPreviewStore {
+  mediaUrl: string | null;
+  setMediaUrl: (mediaUrl: string | null) => void;
+}

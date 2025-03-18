@@ -5,8 +5,10 @@ import useAuthReauthorize from "./hooks/auth/useReauthorize";
 import useSocketHandlers from "./hooks/auth/useSocketHandler";
 import ChatBubbleSidebar from "./components/chat/ChatBubbleSidebar";
 import { AddFriendViewer } from "./components/socialize/AddFriendViewer";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import LoadingScreen from "./animation/LoadingScreen";
+import { usePreventIFrameEmbedding } from "./hooks/frameEmbed/usePreventIframeEmbed";
+import MediaPreview from "./components/common/MediaPreview";
 
 const Root = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -15,8 +17,8 @@ const Root = () => {
   useAuthReauthorize();
   useSocketHandlers();
 
-  useEffect(() => {}, []);
-
+  const { isEmbedded } = usePreventIFrameEmbedding();
+  if (isEmbedded) return "No embedding allowed sory";
   if (!isAuthenticated) return <LoadingScreen />;
 
   return (
@@ -27,10 +29,9 @@ const Root = () => {
         className="lg:hidden"
         smMenuCallback={() => setForceShowMenu((prev) => !prev)}
       />
-
       <div className="flex flex-1 relative">
         <div
-          className={`lg:flex lg:relative absolute top-0 right-0 h-full bg-white shadow-lg transition-transform duration-300 z-40
+          className={`lg:flex lg:relative absolute top-0 right-0 h-full bg-white shadow-lg transition-transform duration-300 z-40 lg:z-0
             ${
               forceShowMenu ? "translate-x-0" : "translate-x-full"
             } lg:translate-x-0`}
@@ -54,6 +55,7 @@ const Root = () => {
       </div>
       <div>
         <AddFriendViewer />
+        <MediaPreview />
       </div>
     </div>
   );
