@@ -8,7 +8,7 @@ interface ImagePreviewProps {
 
 const ImagePreview: FC<ImagePreviewProps> = ({ imageUrl, onClose }) => {
   return (
-    <div className="z-50 fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center animate-scaleIn max-w-[99vw]">
+    <div className="bg-black bg-opacity-80 flex justify-center items-center animate-scaleIn">
       <div className="relative box-border">
         <button
           onClick={onClose}
