@@ -31,10 +31,18 @@ const ChatInterface = () => {
   const [fileInput, setFileInput] = useState<File | null>(null);
   const [disableLoadMore, setDisableLoadMore] = useState(false);
   const [unsentIndex, setUnsentIndex] = useState<number[]>([]);
+  const [fileDataUrl, setFileDataUrl] = useState<string | null>(null);
   const msgEndRef = useRef<HTMLDivElement | null>(null);
   const msgCountRef = useRef<number>(0);
   const userId = useRef(localStorage.getItem("id"));
   const cursorId = useRef<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (!fileInput) return;
+    const objectUrl = URL.createObjectURL(fileInput);
+    setFileDataUrl(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [fileInput]);
 
   useEffect(() => {
     if (!activeChatId) {
@@ -83,7 +91,7 @@ const ChatInterface = () => {
         [
           {
             creatorId: userId.current!,
-            messageBody: msgInput,
+            messageBody: fileLink || msgInput,
             isFile: !!fileInput,
           },
         ],
@@ -104,14 +112,18 @@ const ChatInterface = () => {
         });
         setUnsentIndex((state) => state.filter((i) => i !== currentIndex));
         msgCountRef.current += 1;
-        setLatestMessage(activeChatId, msg, !!fileLink);
+        setLatestMessage(activeChatId, fileInput ? "File" : msg, !!fileLink);
         setFileInput(null);
       }
     } catch (err) {
       msgCountRef.current += 1;
       console.error((err as Error).message);
+    } finally {
+      if (fileDataUrl) {
+        URL.revokeObjectURL(fileDataUrl);
+        setFileDataUrl(null);
+      }
     }
-    console.log(msgCountRef.current, unsentIndex);
   };
 
   const handleLoadMore = async () => {
@@ -170,6 +182,15 @@ const ChatInterface = () => {
                 isLast={unsentIndex.includes(i)}
               />
             ))}
+          {!!fileDataUrl && (
+            <div className="flex justify-end">
+              <img
+                className="opacity-20 justify-end"
+                src={fileDataUrl}
+                alt="preview"
+              />
+            </div>
+          )}
         </div>
       </div>
 
