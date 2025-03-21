@@ -7,6 +7,7 @@ interface ChatBubbleProps {
   text: string;
   handleClick: CallableFunction;
   isTextBold?: boolean;
+  isCurrentUser?: boolean;
 }
 
 const ChatBubble = ({
@@ -15,11 +16,14 @@ const ChatBubble = ({
   username,
   text,
   handleClick,
+  isCurrentUser = false,
 }: ChatBubbleProps) => {
   return (
     <div
       onClick={() => handleClick()}
-      className="mt-1 flex gap-1 items-center max-h-[60px] w-full hover:bg-gray-600 hover:shadow-lg px-2 rounded-md cursor-pointer hover:delay-0"
+      className={`mt-1 flex gap-1 items-center max-h-[60px] w-full px-2 rounded-md cursor-pointer hover:shadow-lg hover:delay-0
+        ${isCurrentUser ? "bg-blue-500 text-white" : "hover:bg-gray-600"}
+      `}
     >
       <ImageBubble src={imageUrl} />
       <div className="relative p-2">

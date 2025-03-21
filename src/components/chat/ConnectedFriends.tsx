@@ -67,6 +67,7 @@ const ConnectedFriends = () => {
         connectedFriends.map((friend) => (
           <ChatBubble
             isTextBold={!activeChatId && latestMsg?.id === friend.userId}
+            isCurrentUser={activeChatId === friend.userId}
             key={friend.userId}
             {...friend}
             text={messages[friend.userId]}
