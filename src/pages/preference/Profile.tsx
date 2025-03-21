@@ -38,7 +38,10 @@ const Profile = () => {
   };
 
   return (
-    <div className="w-1/2 cursor-pointer relative" onClick={handleState}>
+    <div
+      className="w-1/2 cursor-pointer relative text-black"
+      onClick={handleState}
+    >
       {imageUrl && (
         <img
           ref={profileRef}
