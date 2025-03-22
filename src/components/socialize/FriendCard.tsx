@@ -19,32 +19,30 @@ const FriendCard: React.FC<FriendCardProps> = ({
 
   return (
     <div
+      className="bg-white rounded-lg shadow-md p-4 flex flex-col gap-4"
       {...clickEvent}
-      className="cursor-pointer w-[90%] flex items-center justify-center flex-wrap gap-4 bg-white shadow-md rounded-lg p-4 transition hover:shadow-lg"
     >
-      <img
-        src={imageUrl}
-        alt={username}
-        className="w-12 h-12 rounded-full object-cover border-2 border-gray-300"
-      />
-
-      <div className="flex-1">
+      <div className="flex items-center justify-between">
+        <img
+          src={imageUrl}
+          alt={username}
+          className="w-12 h-12 rounded-full object-cover"
+        />
         <h3 className="text-lg font-semibold text-gray-800">{username}</h3>
-        <p className="text-sm text-gray-500">
-          Friend ID: {id.replace(/-/g, "")}
-        </p>
       </div>
-
+      <p className="text-sm text-gray-500">
+        Friend ID: {id.replace(/-/g, "")}
+      </p>
       {isAccepted ? (
-        <span className="flex items-center text-sm font-medium text-green-600 bg-green-100 px-3 py-1 rounded-full">
-          <CheckCircle className="w-4 h-4 mr-1" />
-          Accepted
-        </span>
+        <div className="bg-green-100 rounded-full p-2 flex items-center justify-center">
+          <CheckCircle className="w-4 h-4 mr-1 text-green-600" />
+          <span className="text-sm font-medium text-green-600">Accepted</span>
+        </div>
       ) : (
-        <span className="flex items-center text-sm font-medium text-gray-500 bg-gray-200 px-3 py-1 rounded-full">
-          <User className="w-4 h-4 mr-1" />
-          Pending
-        </span>
+        <div className="bg-gray-200 rounded-full p-2 flex items-center justify-center">
+          <User className="w-4 h-4 mr-1 text-gray-500" />
+          <span className="text-sm font-medium text-gray-500">Pending</span>
+        </div>
       )}
       {children && <div>{children}</div>}
     </div>
