@@ -13,3 +13,15 @@ export function isValidUrl(url: string) {
     return { valid: false, pathname: "", err: (err as Error).message };
   }
 }
+
+function isValidImageUrl(url: string): boolean {
+  if (typeof url !== "string") return false;
+  try {
+    const validUrl = new URL(url);
+    return /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(validUrl.pathname);
+  } catch {
+    return false;
+  }
+}
+
+export { isValidImageUrl };

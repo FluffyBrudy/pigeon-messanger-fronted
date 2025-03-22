@@ -12,6 +12,7 @@ import { SocketSingleton } from "../../socket/socket";
 import { SERVER_EVENTS } from "../../socket/constants";
 import SkeletonChatBubble from "../../animation/SkeletonChatBubble";
 import { uploadImage } from "../../service/mediaUpload";
+import { isValidImageUrl } from "../../utils/urlUtils";
 
 const ChatInterface = () => {
   const { activeChatId, chatMessages, username, imageUrl } =
@@ -178,7 +179,7 @@ const ChatInterface = () => {
                 key={i}
                 isUser={userId.current === chat.creatorId}
                 message={chat.messageBody}
-                isFile={chat.isFile}
+                isFile={chat.isFile || isValidImageUrl(chat.messageBody)}
                 isLast={unsentIndex.includes(i)}
               />
             ))}
