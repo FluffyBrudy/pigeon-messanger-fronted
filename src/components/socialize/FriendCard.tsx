@@ -19,7 +19,7 @@ const FriendCard: React.FC<FriendCardProps> = ({
 
   return (
     <div
-      className="bg-white rounded-lg shadow-md p-4 flex flex-col gap-4"
+      className="bg-white rounded-lg shadow-md p-4 flex flex-col gap-4 min-w-[200px] cursor-pointer"
       {...clickEvent}
     >
       <div className="flex items-center justify-between">
@@ -31,7 +31,7 @@ const FriendCard: React.FC<FriendCardProps> = ({
         <h3 className="text-lg font-semibold text-gray-800">{username}</h3>
       </div>
       <p className="text-sm text-gray-500">
-        Friend ID: {id.replace(/-/g, "")}
+        Friend ID: {id && Math.random().toString(16).slice(2)}
       </p>
       {isAccepted ? (
         <div className="bg-green-100 rounded-full p-2 flex items-center justify-center">
