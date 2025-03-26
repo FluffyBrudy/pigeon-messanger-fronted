@@ -81,6 +81,7 @@ const MessageInputBox: FC<MessageInputBoxProps> = ({
             ref={fileRef}
             className="hidden"
             type="file"
+            accept="image/*,video/*"
           />
         </div>
         <button
