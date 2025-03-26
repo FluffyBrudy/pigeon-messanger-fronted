@@ -15,7 +15,7 @@ const MessageBubble: FC<MessageBubbleProps> = ({
   isLast = false,
 }) => {
   const setMediaUrl = useMediaPreviewStore((state) => state.setMediaUrl);
-
+  if (!message) return null;
   const bubbleStyles = isFile
     ? "bg-transparent"
     : isUser
