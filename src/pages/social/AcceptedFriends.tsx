@@ -27,8 +27,8 @@ const AcceptedFriends = () => {
     getAcceptedFriends();
   }, []);
   return (
-    <div className="w-full h-full overflow-auto p-[3vmin] flex flex-col">
-      <div className="w-full flex flex-col items-center mt-5 gap-2 flex-grow">
+    <div className="w-full h-full p-[3vmin]  flex-col">
+      <div className="w-full flex  justify-around mt-5 gap-2 flex-grow flex-wrap">
         {friends.length > 0 ? (
           friends.map((friend) => (
             <FriendCard

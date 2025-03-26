@@ -24,4 +24,14 @@ function isValidImageUrl(url: string): boolean {
   }
 }
 
-export { isValidImageUrl };
+function isValidVideoUrl(url: string): boolean {
+  if (typeof url !== "string") return false;
+  try {
+    const validUrl = new URL(url);
+    return /\.(mp4|webm|ogg)$/i.test(validUrl.pathname);
+  } catch {
+    return false;
+  }
+}
+
+export { isValidImageUrl, isValidVideoUrl };

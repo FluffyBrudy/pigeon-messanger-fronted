@@ -124,7 +124,7 @@ const PendingRequests = () => {
                 >
                   <button
                     onClick={() => rejectOrCancelRequest(request.userId)}
-                    className="px-4 py-1 text-sm font-medium bg-red-500 text-white rounded-md shadow-sm hover:bg-red-600 transition ml-2"
+                    className="w-full px-4 py-1 text-sm bg-red-500 text-white rounded-md shadow-sm hover:bg-red-600 transition font-bold"
                   >
                     Cancel
                   </button>
