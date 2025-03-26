@@ -81,49 +81,92 @@ const ChatInterface = () => {
   }, [chatMessages]);
 
   const handleSend = async () => {
-    if (msgInput.trim().length === 0 && !fileInput) return;
-    if (!activeChatId) return;
+    if ((!msgInput.trim().length && !fileInput) || !activeChatId) return;
+
     try {
-      const fileLink = fileInput && (await uploadImage(fileInput));
       const currentIndex = msgCountRef.current;
-      if (currentIndex)
-        setUnsentIndex((state) => [...state, msgCountRef.current]);
-      setChatMessages(
-        [
-          {
-            creatorId: userId.current!,
-            messageBody: fileLink || msgInput,
-            isFile: !!fileInput,
-          },
-        ],
-        "a"
-      );
-      const msgResponse = await api.post(CHAT_MESSAGE_CREATE_POST, {
-        recipientId: activeChatId,
-        message: fileLink || msgInput,
-        isFile: !!fileLink,
-      });
-      if (msgResponse.status === 200) {
-        const { message } = msgResponse.data.data as CreateChatMessageResponse;
-        const msg = fileLink || message;
-        SocketSingleton.emitEvent(SERVER_EVENTS.CHAT_MESSAGE, {
-          creatorId: userId.current,
-          message: msg,
-          recipientId: [activeChatId],
-        });
-        setUnsentIndex((state) => state.filter((i) => i !== currentIndex));
-        msgCountRef.current += 1;
-        setLatestMessage(activeChatId, fileInput ? "File" : msg, !!fileLink);
-        setFileInput(null);
+      if (currentIndex) setUnsentIndex((state) => [...state, currentIndex]);
+
+      if (msgInput.trim().length) {
+        setChatMessages(
+          [
+            {
+              creatorId: userId.current!,
+              messageBody: msgInput,
+              isFile: false,
+            },
+          ],
+          "a"
+        );
+
+        api
+          .post(CHAT_MESSAGE_CREATE_POST, {
+            recipientId: activeChatId,
+            message: msgInput,
+            isFile: false,
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              const { message } = response.data
+                .data as CreateChatMessageResponse;
+
+              SocketSingleton.emitEvent(SERVER_EVENTS.CHAT_MESSAGE, {
+                creatorId: userId.current,
+                message: message,
+                recipientId: [activeChatId],
+              });
+
+              setUnsentIndex((state) =>
+                state.filter((i) => i !== currentIndex)
+              );
+              msgCountRef.current += 1;
+              setLatestMessage(activeChatId, message, false);
+            }
+          })
+          .catch((err) => console.error((err as Error).message));
       }
+
+      if (fileInput) {
+        const fileToSend = fileInput;
+
+        uploadImage(fileToSend)
+          .then((fileLink) => {
+            if (!fileLink) throw new Error("File upload failed");
+
+            return api.post(CHAT_MESSAGE_CREATE_POST, {
+              recipientId: activeChatId,
+              message: fileLink,
+              isFile: true,
+            });
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              SocketSingleton.emitEvent(SERVER_EVENTS.CHAT_MESSAGE, {
+                creatorId: userId.current,
+                message: response.data.data.message,
+                recipientId: [activeChatId],
+              });
+
+              setUnsentIndex((state) =>
+                state.filter((i) => i !== currentIndex)
+              );
+              msgCountRef.current += 1;
+              setLatestMessage(activeChatId, "File", true);
+            }
+          })
+          .catch((err) => console.error((err as Error).message))
+          .finally(() => {
+            if (fileDataUrl) {
+              URL.revokeObjectURL(fileDataUrl);
+              setFileDataUrl(null);
+            }
+          });
+      }
+
+      setFileInput(null);
+      setMsgInput("");
     } catch (err) {
-      msgCountRef.current += 1;
       console.error((err as Error).message);
-    } finally {
-      if (fileDataUrl) {
-        URL.revokeObjectURL(fileDataUrl);
-        setFileDataUrl(null);
-      }
     }
   };
 
