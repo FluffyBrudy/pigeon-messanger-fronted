@@ -4,7 +4,7 @@ import { useMediaPreviewStore } from "../../store/mediaPreviewStore";
 const MediaPreview = () => {
   const { setMediaUrl, mediaUrl } = useMediaPreviewStore();
   if (!mediaUrl) return null;
-  console.log(mediaUrl);
+
   return (
     <div className="fixed top-0 left-0 bg-black bg-opacity-80 flex justify-center items-center animate-scaleIn w-[100vw] h-[100vh] overflow-auto">
       <div className="relative box-border flex justify-center items-center w-[80%] h-[80%]">
