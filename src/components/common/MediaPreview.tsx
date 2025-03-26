@@ -4,11 +4,12 @@ import { isValidImageUrl, isValidVideoUrl } from "../../utils/urlUtils";
 
 const MediaPreview = () => {
   const { setMediaUrl, mediaUrl } = useMediaPreviewStore();
-  if (!mediaUrl) return null;
-  const isImage = isValidImageUrl(mediaUrl);
-  const isVideo = isValidVideoUrl(mediaUrl);
+  if (!mediaUrl) {
+    return null;
+  }
+  const isImage = isValidImageUrl(mediaUrl).valid;
+  const isVideo = isValidVideoUrl(mediaUrl).valid;
   if (!isImage && !isVideo) return null;
-  
 
   return (
     <div className="fixed top-0 left-0 bg-black bg-opacity-80 flex justify-center items-center animate-scaleIn w-[100vw] h-[100vh] overflow-auto">
@@ -20,11 +21,15 @@ const MediaPreview = () => {
           <X className="text-black bg-red-500 rounded-full" />
         </button>
 
-        {isImage ?  <img
-          src={mediaUrl}
-          alt="Preview"
-          className="rounded-lg shadow-lg max-w-full max-h-full"
-        />: isVideo ? <video src={mediaUrl} autoPlay={true} /> : null}
+        {isImage ? (
+          <img
+            src={mediaUrl}
+            alt="Preview"
+            className="rounded-lg shadow-lg max-w-full max-h-full"
+          />
+        ) : isVideo ? (
+          <video src={mediaUrl} autoPlay={true} controls={true} />
+        ) : null}
       </div>
     </div>
   );

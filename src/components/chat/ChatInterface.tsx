@@ -12,7 +12,6 @@ import { SocketSingleton } from "../../socket/socket";
 import { SERVER_EVENTS } from "../../socket/constants";
 import SkeletonChatBubble from "../../animation/SkeletonChatBubble";
 import { uploadImage } from "../../service/mediaUpload";
-import { isValidImageUrl } from "../../utils/urlUtils";
 
 const ChatInterface = () => {
   const { activeChatId, chatMessages, username, imageUrl } =
@@ -28,13 +27,12 @@ const ChatInterface = () => {
   );
 
   const [messagesLoading, setMessagesLoading] = useState(true);
+  const [messageSending, setMessageSending] = useState(false);
   const [msgInput, setMsgInput] = useState("");
   const [fileInput, setFileInput] = useState<File | null>(null);
   const [disableLoadMore, setDisableLoadMore] = useState(false);
-  const [unsentIndex, setUnsentIndex] = useState<number[]>([]);
   const [fileDataUrl, setFileDataUrl] = useState<string | null>(null);
   const msgEndRef = useRef<HTMLDivElement | null>(null);
-  const msgCountRef = useRef<number>(0);
   const userId = useRef(localStorage.getItem("id"));
   const cursorId = useRef<string | undefined>(undefined);
 
@@ -62,7 +60,6 @@ const ChatInterface = () => {
             const data = res.data.data as FetchChatResponse;
             setChatMessages(data.chats.reverse());
             setProfileInfo(data.username, data.imageUrl);
-            msgCountRef.current = data.chats.length;
             cursorId.current = data.cursor;
           }
         })
@@ -81,92 +78,49 @@ const ChatInterface = () => {
   }, [chatMessages]);
 
   const handleSend = async () => {
-    if ((!msgInput.trim().length && !fileInput) || !activeChatId) return;
-
+    if (msgInput.trim().length === 0 && !fileInput) return;
+    if (!activeChatId) return;
     try {
-      const currentIndex = msgCountRef.current;
-      if (currentIndex) setUnsentIndex((state) => [...state, currentIndex]);
+      const fileLink = fileInput && (await uploadImage(fileInput));
 
-      if (msgInput.trim().length) {
-        setChatMessages(
-          [
-            {
-              creatorId: userId.current!,
-              messageBody: msgInput,
-              isFile: false,
-            },
-          ],
-          "a"
-        );
+      setChatMessages(
+        [
+          {
+            creatorId: userId.current!,
+            messageBody: fileLink || msgInput,
+            isFile: !!fileInput,
+          },
+        ],
+        "a"
+      );
+      setMessageSending(true);
+      const msgResponse = await api.post(CHAT_MESSAGE_CREATE_POST, {
+        recipientId: activeChatId,
+        message: fileLink || msgInput,
+        isFile: !!fileLink,
+      });
+      if (msgResponse.status === 200) {
+        setMessageSending(false);
+        const { message } = msgResponse.data.data as CreateChatMessageResponse;
+        const msg = fileLink || message;
 
-        api
-          .post(CHAT_MESSAGE_CREATE_POST, {
-            recipientId: activeChatId,
-            message: msgInput,
-            isFile: false,
-          })
-          .then((response) => {
-            if (response.status === 200) {
-              const { message } = response.data
-                .data as CreateChatMessageResponse;
+        setLatestMessage(activeChatId, fileInput ? "File" : msg, !!fileLink);
+        setFileInput(null);
 
-              SocketSingleton.emitEvent(SERVER_EVENTS.CHAT_MESSAGE, {
-                creatorId: userId.current,
-                message: message,
-                recipientId: [activeChatId],
-              });
-
-              setUnsentIndex((state) =>
-                state.filter((i) => i !== currentIndex)
-              );
-              msgCountRef.current += 1;
-              setLatestMessage(activeChatId, message, false);
-            }
-          })
-          .catch((err) => console.error((err as Error).message));
+        SocketSingleton.emitEvent(SERVER_EVENTS.CHAT_MESSAGE, {
+          creatorId: userId.current,
+          message: msg,
+          recipientId: [activeChatId],
+        });
       }
-
-      if (fileInput) {
-        const fileToSend = fileInput;
-
-        uploadImage(fileToSend)
-          .then((fileLink) => {
-            if (!fileLink) throw new Error("File upload failed");
-
-            return api.post(CHAT_MESSAGE_CREATE_POST, {
-              recipientId: activeChatId,
-              message: fileLink,
-              isFile: true,
-            });
-          })
-          .then((response) => {
-            if (response.status === 200) {
-              SocketSingleton.emitEvent(SERVER_EVENTS.CHAT_MESSAGE, {
-                creatorId: userId.current,
-                message: response.data.data.message,
-                recipientId: [activeChatId],
-              });
-
-              setUnsentIndex((state) =>
-                state.filter((i) => i !== currentIndex)
-              );
-              msgCountRef.current += 1;
-              setLatestMessage(activeChatId, "File", true);
-            }
-          })
-          .catch((err) => console.error((err as Error).message))
-          .finally(() => {
-            if (fileDataUrl) {
-              URL.revokeObjectURL(fileDataUrl);
-              setFileDataUrl(null);
-            }
-          });
-      }
-
-      setFileInput(null);
-      setMsgInput("");
     } catch (err) {
       console.error((err as Error).message);
+      setMessageSending(false);
+    } finally {
+      if (fileDataUrl) {
+        URL.revokeObjectURL(fileDataUrl);
+        setFileDataUrl(null);
+      }
     }
   };
 
@@ -206,7 +160,7 @@ const ChatInterface = () => {
         <p className="ml-2 font-medium">{username}</p>
       </div>
 
-      <div className="flex flex-[0.9] lg:flex-1 flex-col overflow-auto w-[90%] lg:w-[60%]">
+      <div className="flex flex-[0.9] lg:flex-1 flex-col overflow-auto w-[90%] lg:w-[61%] px-[1%]">
         {chatMessages.length > 50 && !disableLoadMore && (
           <button
             onClick={handleLoadMore}
@@ -222,18 +176,28 @@ const ChatInterface = () => {
                 key={i}
                 isUser={userId.current === chat.creatorId}
                 message={chat.messageBody}
-                isFile={chat.isFile || isValidImageUrl(chat.messageBody)}
-                isLast={unsentIndex.includes(i)}
+                isFile={chat.isFile}
               />
             ))}
-          {!!fileDataUrl && (
+          {!!fileDataUrl && fileInput?.type.match(/^(image|video)\//) && (
             <div className="flex justify-end">
-              <img
-                className="opacity-20 justify-end"
-                src={fileDataUrl}
-                alt="preview"
-              />
+              {fileInput.type.startsWith("image/") ? (
+                <img
+                  className="opacity-20 justify-end"
+                  src={fileDataUrl}
+                  alt="preview"
+                />
+              ) : (
+                <video
+                  className="opacity-20 justify-end"
+                  src={fileDataUrl}
+                  controls
+                />
+              )}
             </div>
+          )}
+          {messageSending && (
+            <p className="font-bold flex text-sm justify-end">sending...</p>
           )}
         </div>
       </div>
