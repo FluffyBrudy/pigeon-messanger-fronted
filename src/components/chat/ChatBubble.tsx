@@ -21,7 +21,7 @@ const ChatBubble = ({
   return (
     <div
       onClick={() => handleClick()}
-      className={`mt-1 flex gap-1 items-center max-h-[60px] w-full px-2 rounded-md cursor-pointer hover:shadow-lg hover:delay-0
+      className={`flex gap-1 items-center max-h-[60px] w-full px-2 rounded-md cursor-pointer hover:shadow-lg hover:delay-0
         ${isCurrentUser ? "bg-blue-500 text-white" : "hover:bg-gray-600"}
       `}
     >
